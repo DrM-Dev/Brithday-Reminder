@@ -1,4 +1,6 @@
 #Birthday Reminder - ver       by      Dr.M-Dev
+from rdflib.plugins.sparql.parserutils import value
+
 ver = "0.1.1"
 #====================IMPORTS:
 from tkinter import *
@@ -68,9 +70,7 @@ b_year = 0
 widgets_x_place = 20
 widgets_y_place = 20
 #|
-buttons_x_displacement = 50
-buttons_y_displacement = 50
-
+widgets_background = "#343638"
 
 
 #______________________________________________________________
@@ -137,14 +137,38 @@ print(f"**** WELCOME TO Birthday-Reminder {ver}   -by-    Dr.M-Dev ****")
 name_entry_l = customtkinter.CTkLabel(root, text="Enter Name:", text_color="black", font=COMMON_FONT)
 name_entry_l.place(x=widgets_x_place+2,y=widgets_y_place+370)
 #
-name_entry = customtkinter.CTkEntry(root, bg_color="transparent", fg_color="white", font=COMMON_FONT, text_color="Black", width=250)
+name_entry = customtkinter.CTkEntry(root, bg_color="transparent", fg_color=widgets_background, font=COMMON_FONT, text_color="white", width=250)
 name_entry.place(x=widgets_x_place,y=widgets_y_place+400)
 
 
 #_____________________________________________________________DATE INPUTS: (spin boxes)
-date_ls = customtkinter.CTkLabel(root, text="Enter Name:", text_color="black", font=COMMON_FONT)
-date_ls.place(x=widgets_x_place+2,y=widgets_y_place+370)
+x_shift = -180
+#--------day drop-down menu:
+day_drop_menu_LABEL = customtkinter.CTkLabel(root, text="Day", text_color="black", font=COMMON_FONT)
+day_drop_menu_LABEL.place(x=widgets_x_place+197+x_shift,y=widgets_y_place+430)
+#----
+days_list = [str(day+1) for day in range(0,30)] #list configuration
 #
+day_drop_menu = customtkinter.CTkComboBox(root, values=days_list, state="readonly", width=60)
+day_drop_menu.set("0")
+day_drop_menu.place(x=widgets_x_place+180+x_shift,y=widgets_y_place+460)
+
+# #--------month drop-down menu:
+month_drop_menu_LABEL = customtkinter.CTkLabel(root, text="Month", text_color="black", font=COMMON_FONT)
+month_drop_menu_LABEL.place(x=widgets_x_place+257+x_shift,y=widgets_y_place+430)
+# #----
+months_list = [str(month+1) for month in range(0,12)] #list configuration
+#
+month_drop_menu = customtkinter.CTkComboBox(root, values=months_list, state="readonly", width=60)
+month_drop_menu.set("0")
+month_drop_menu.place(x=widgets_x_place+250+x_shift,y=widgets_y_place+460)
+
+# #--------year drop-down menu:
+year_drop_menu_LABEL = customtkinter.CTkLabel(root, text="Year", text_color="black", font=COMMON_FONT)
+year_drop_menu_LABEL.place(x=widgets_x_place+257+88+x_shift,y=widgets_y_place+430)
+#
+year_drop_entry = customtkinter.CTkEntry(root, bg_color="transparent", fg_color=widgets_background, font=COMMON_FONT, text_color="White", width=112)
+year_drop_entry.place(x=widgets_x_place+257+60+x_shift,y=widgets_y_place+460)
 
 
 
