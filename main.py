@@ -17,7 +17,7 @@ import os
 
 
 #====================Font/Colors Constants:
-BACKGROUND_COLOR = "#FFC0CB"
+BACKGROUND_COLOR = "LightYellow"
 COMMON_FONT = ("Courier", 14, "bold")
 
 #====================SETUP
@@ -69,6 +69,9 @@ b_year = 0
 #-------------Widgets displacement
 widgets_x_place = 20
 widgets_y_place = 20
+#|
+buttons_x_displacement = 100
+buttons_y_displacement = 100
 #|
 widgets_background = "#343638"
 
@@ -174,48 +177,97 @@ year_drop_entry.place(x=widgets_x_place+257+60+x_shift,y=widgets_y_place+460)
 
 
 #_____________________________________________________________BUTTONS:
-############################FUNCTION
+
+
+
+#0000#------------------------------ SAVE BIRTHDAY BUTTON!
+#####-----------------------FUNCTION
 def add_b_day():
     pass
 
-############################THE BUTTON
-# #0000-Add b-day button
-# ####-------------------------Button Text Labels
-# correct_b__label = customtkinter.CTkLabel(root, text=f"Get Another Card", font=("Courier", 14, "bold"), text_color="Black")
-# correct_b__label.place(x=150+210+buttons_x_displacement,y=400+buttons_y_displacement+100)
-#
-# ####-------------------------BUTTON-ART / IMAGES
-# new_card_b__normal_state_image = customtkinter.CTkImage(light_image=Image.open("images/cards_norm.png"),size=(150, 100))
-# new_card_b__hover_in_image = customtkinter.CTkImage(light_image=Image.open("images/cards_hover.png"),size=(150, 100))
-# new_card_b__clicked_image = customtkinter.CTkImage(light_image=Image.open("images/cards_clicked.png"),size=(150, 100))
-#
-# ####-------------------------BUTTON-MAIN-FUNCTIONS
-# # def new_card_button_event():
-# #----------------------------->THE MAIN FUNCTION OF THIS BUTTON ISS GETTING A NEW CARD ->  picking_state()
-#
-# ####-------------------------BUTTON-CONSTRUCTION Widget
-# new_card_mark_button = customtkinter.CTkButton(root, image=new_card_b__normal_state_image , text="", height=50, width=150,command=add_b_day, fg_color="transparent",border_width=0, hover=False)
-# new_card_mark_button.place(x=150+210+buttons_x_displacement,y=400+buttons_y_displacement)
-#
-# ####-------------------------BUTTON-Aesthetic-functions
-# #----HOVER
-# def new_card_b_hover_in(event):
-#     new_card_mark_button.configure(image=new_card_b__hover_in_image)
-# def new_card_b_hover_out(event):
-#     new_card_mark_button.configure(image=new_card_b__normal_state_image)
-# #bind events:
-# new_card_mark_button.bind("<Enter>", new_card_b_hover_in)
-# new_card_mark_button.bind("<Leave>", new_card_b_hover_out)
-#
-# #----CLICK-STATE
-# def new_card_b_clicked(event):
-#     new_card_mark_button.configure(image=new_card_b__clicked_image)
-# def new_card_b_unclicked(event):
-#     new_card_mark_button.configure(image=new_card_b__normal_state_image)
-# #bind events:
-# new_card_mark_button.bind("<ButtonPress-1>", new_card_b_clicked)
-# new_card_mark_button.bind("<ButtonRelease-1>", new_card_b_unclicked)
+#####-----------------------THE BUTTON
+save_bday_b_x_displace = 250
+save_bday_b_y_displace = 230
+#0000-Add b-day button
+####-------------------------BUTTON-ART / IMAGES
+b_day_save_b_norm_img = customtkinter.CTkImage(light_image=Image.open("images/cake_norm.png"),size=(150, 200))
+b_day_save_b_hover_img = customtkinter.CTkImage(light_image=Image.open("images/cake_hover.png"),size=(150, 200))
+b_day_save_b_clicked_img = customtkinter.CTkImage(light_image=Image.open("images/cake_clicked.png"),size=(150, 200))
 
+####-------------------------BUTTON-CONSTRUCTION Widget
+b_day_save_button = customtkinter.CTkButton(root, image=b_day_save_b_norm_img , text="", height=50, width=150,command=add_b_day, fg_color="transparent",border_width=0, hover=False)
+b_day_save_button.place(x=buttons_x_displacement+save_bday_b_x_displace,y=buttons_y_displacement+save_bday_b_y_displace)
+
+####-------------------------BUTTON-Aesthetic-functions
+#----HOVER
+def b_day_save_b_hover_in(event):
+    b_day_save_button.configure(image=b_day_save_b_hover_img)
+def b_day_save_b_hover_out(event):
+    b_day_save_button.configure(image=b_day_save_b_norm_img)
+#bind events:
+b_day_save_button.bind("<Enter>", b_day_save_b_hover_in)
+b_day_save_button.bind("<Leave>", b_day_save_b_hover_out)
+
+#----CLICK-STATE
+def b_day_save_b_clicked(event):
+    b_day_save_button.configure(image=b_day_save_b_clicked_img)
+def b_day_save_b_unclicked(event):
+    b_day_save_button.configure(image=b_day_save_b_norm_img)
+#bind events:
+b_day_save_button.bind("<ButtonPress-1>", b_day_save_b_clicked)
+b_day_save_button.bind("<ButtonRelease-1>", b_day_save_b_unclicked)
+
+####-------------------------Button Text Labels
+save_b_day_button_l = customtkinter.CTkLabel(root, text=f"Click Me To Save This Birthday", font=COMMON_FONT, text_color="Black")
+save_b_day_button_l.place(x=buttons_x_displacement+save_bday_b_x_displace-50,y=buttons_y_displacement+save_bday_b_y_displace+190)
+
+
+
+
+
+
+
+#0000#------------------------------ START-OVER BUTTON!
+#####-----------------------FUNCTION
+def clear_entries():
+    pass
+
+
+#####-----------------------THE BUTTON
+start_over_b_x_displace = -60
+start_over_b_y_displace = 410
+#0000-Add b-day button
+####-------------------------BUTTON-ART / IMAGES
+start_over_b_norm_img = customtkinter.CTkImage(light_image=Image.open("images/startover_norm.png"),size=(200, 50))
+start_over_b_hover_img = customtkinter.CTkImage(light_image=Image.open("images/startover_hover.png"),size=(200, 50))
+start_over_b_clicked_img = customtkinter.CTkImage(light_image=Image.open("images/startover_clicked.png"),size=(200, 50))
+
+####-------------------------BUTTON-CONSTRUCTION Widget
+start_over_button = customtkinter.CTkButton(root, image=start_over_b_norm_img , text="", height=50, width=150,command=add_b_day, fg_color="transparent",border_width=0, hover=False)
+start_over_button.place(x=buttons_x_displacement+start_over_b_x_displace,y=buttons_y_displacement+start_over_b_y_displace)
+
+####-------------------------BUTTON-Aesthetic-functions
+#----HOVER
+def start_over_b_hover_in(event):
+    start_over_button.configure(image=start_over_b_hover_img)
+def start_over_b_hover_out(event):
+    start_over_button.configure(image=start_over_b_norm_img)
+#bind events:
+start_over_button.bind("<Enter>", start_over_b_hover_in)
+start_over_button.bind("<Leave>", start_over_b_hover_out)
+
+#----CLICK-STATE
+def start_over_b_clicked(event):
+    start_over_button.configure(image=start_over_b_clicked_img)
+def start_over_b_unclicked(event):
+    start_over_button.configure(image=start_over_b_norm_img)
+#bind events:
+start_over_button.bind("<ButtonPress-1>", start_over_b_clicked)
+start_over_button.bind("<ButtonRelease-1>", start_over_b_unclicked)
+
+
+####-------------------------Button Text Labels
+#NO NEED it's written on it :)
 
 
 #==============END
