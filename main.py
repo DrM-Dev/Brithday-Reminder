@@ -1,11 +1,9 @@
-#Happy Birthday - ver       by      Dr.M-Dev
+#Birthday Reminder - ver       by      Dr.M-Dev
 ver = "0.1.1"
 #====================IMPORTS:
 from tkinter import *
 import customtkinter
 from PIL import ImageTk, Image
-#
-import ctk_gif_class
 from customtkinter import CTkImage, CTkLabel
 #
 from tkinter import messagebox
@@ -16,32 +14,9 @@ import sys
 import os
 
 
-
-#====================STATES-LIST
-state_keys_list = ["Alabama", "Alaska", "Arizona", "Arkansas", "California", "Colorado", "Connecticut", "Delaware", "Florida", "Georgia", "Hawaii", "Idaho", "Illinois", "Indiana", "Iowa", "Kansas", "Kentucky", "Louisiana", "Maine", "Maryland", "Massachusetts", "Michigan", "Minnesota", "Mississippi", "Missouri", "Montana", "Nebraska", "Nevada", "New Hampshire", "New Jersey", "New Mexico", "New York", "North Carolina", "North Dakota", "Ohio", "Oklahoma", "Oregon", "Pennsylvania", "Rhode Island", "South Carolina", "South Dakota", "Tennessee", "Texas", "Utah", "Vermont", "Virginia", "Washington", "West Virginia", "Wisconsin", "Wyoming"]
-
-
 #====================Font/Colors Constants:
-BACKGROUND_COLOR = "#4f97fb"
-# GUESS_TITLE_FONT = "Ariel", 15, "italic"
-# STATE_NAME_FONT = "Courier", 50, "bold"
-
-#====================
-# States Left To Guess Counter
-cards_left = 50
-
-#====================Globals:
-player_choice = None
-player_SCORE = 0
-score_effected = False #(false -> the score is NOT YET Effected),
-                      # (true -> the score have already been effected, and shouldn't be altered any further)
-#
-# fetched_tuple = None
-the_state = "state_null"
-the_name = ""
-#
-lang_keys_list = []
-guessed_keys_list = []
+BACKGROUND_COLOR = "#FFC0CB"
+COMMON_FONT = ("Arial", 10, "bold")
 
 #====================SETUP
 customtkinter.set_appearance_mode("dark")
@@ -55,15 +30,30 @@ window_height = 600
 #
 root.minsize(window_width,window_height)
 root.maxsize(window_width,window_height)
-root.config(padx=20,pady=20)
+root.config(padx=20,pady=20) #padding!
 #-------------
-root.title(f"States Flashcards Game {ver}")
+root.title(f"Birthday Reminder {ver}")
+
+#====================Logo / Icons:
 #----bitmap
-root.iconbitmap("images/StatesFlashGame_bitmap.ico")
+# root.iconbitmap("images/StatesFlashGame_bitmap.ico") #<---------------ADD A BIT MAP & LOGO
 #----logo:
-logo = customtkinter.CTkImage(light_image=Image.open("images/LOGO_T_Black.png"),size=(110,100))
-logo_label = customtkinter.CTkLabel(root ,text="", fg_color="transparent" ,image=logo, bg_color="transparent")
-logo_label.place(x=5,y=180)
+# logo = customtkinter.CTkImage(light_image=Image.open("images/LOGO_T_Black.png"),size=(110,100))
+# logo_label = customtkinter.CTkLabel(root ,text="", fg_color="transparent" ,image=logo, bg_color="transparent")
+# logo_label.place(x=5,y=180)
+
+####FLAG GIF:
+#
+# import ctk_gif_class
+#
+# flag_gif = ctk_gif_class.CTkGIFLabel(root,gif_path="images/usa_flag_gif.gif") #200x100 is ideal + #no need to start animation, it's part of its __init__ implementation
+# flag_gif.place(x=window_width/4+590,y=window_height/4+30)
+
+#====================Globals:
+birthday = [0,0,0] # day/month/year A LIST to be stored
+b_day = 0
+b_month = 0
+b_year = 0
 #--------------------------
 #-------------Widgets displacement
 widgets_x_place = 20
@@ -72,13 +62,6 @@ widgets_y_place = 20
 buttons_x_displacement = 50
 buttons_y_displacement = 50
 
-#====================Globals:
-#x+x+x+x+x+x+x+x+x+x+x+x
-chosen_state_title = ""
-
-#####################FLAG GIF:
-flag_gif = ctk_gif_class.CTkGIFLabel(root,gif_path="images/usa_flag_gif.gif") #200x100 is ideal + #no need to start animation, it's part of its __init__ implementation
-flag_gif.place(x=window_width/4+590,y=window_height/4+30)
 
 
 #______________________________________________________________
@@ -124,6 +107,21 @@ print('''
 
  ''')
 
-print(f"**** WELCOME to States Flashcards Game {ver}   -by-    Dr.M-Dev ****")
+print(f"**** WELCOME TO Birthday-Reminder {ver}   -by-    Dr.M-Dev ****")
 #====================#====================#====================#==================
 #====================#====================#====================#==================
+def run_code():
+    pass
+
+
+
+
+
+
+
+#_____________________________________________________________Starting the code with:
+run_code()
+
+
+#==============END
+root.mainloop()
