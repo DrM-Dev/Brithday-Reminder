@@ -7,16 +7,16 @@ from PIL import ImageTk, Image
 from customtkinter import CTkImage, CTkLabel
 #
 from tkinter import messagebox
-#
-import random
-#----NEW:
+#----gif:
+import ctk_gif_class
+#----restart:
 import sys
 import os
 
 
 #====================Font/Colors Constants:
 BACKGROUND_COLOR = "#FFC0CB"
-COMMON_FONT = ("Arial", 10, "bold")
+COMMON_FONT = ("Courier", 14, "bold")
 
 #====================SETUP
 customtkinter.set_appearance_mode("dark")
@@ -25,7 +25,7 @@ customtkinter.set_default_color_theme("dark-blue")
 root = customtkinter.CTk()
 root.configure(fg_color=BACKGROUND_COLOR)
 #
-window_width = 1000
+window_width = 600
 window_height = 600
 #
 root.minsize(window_width,window_height)
@@ -42,14 +42,23 @@ root.title(f"Birthday Reminder {ver}")
 # logo_label = customtkinter.CTkLabel(root ,text="", fg_color="transparent" ,image=logo, bg_color="transparent")
 # logo_label.place(x=5,y=180)
 
-####FLAG GIF:
-#
+
+
+#BIRTHDAY CAKE GIF# :3
 # import ctk_gif_class
 #
-# flag_gif = ctk_gif_class.CTkGIFLabel(root,gif_path="images/usa_flag_gif.gif") #200x100 is ideal + #no need to start animation, it's part of its __init__ implementation
-# flag_gif.place(x=window_width/4+590,y=window_height/4+30)
+# XXXXXX_gif = ctk_gif_class.CTkGIFLabel(root,gif_path="images/XXXXXX.gif") #200x100 is ideal + #no need to start animation, it's part of its __init__ implementation
+# XXXXXX_gif.place(x=window_width/4+590,y=window_height/4+30)
 
 #====================Globals:
+birthday_entry = {
+    "name" : "",
+    "b_day" : 0,
+    "b_month" : 0,
+    "b_year" : 0,
+    "date_day" : 0
+}
+#--------------------------
 birthday = [0,0,0] # day/month/year A LIST to be stored
 b_day = 0
 b_month = 0
@@ -108,19 +117,81 @@ print('''
  ''')
 
 print(f"**** WELCOME TO Birthday-Reminder {ver}   -by-    Dr.M-Dev ****")
-#====================#====================#====================#==================
-#====================#====================#====================#==================
-def run_code():
+#====================#====================#====================#==================#==================#==================
+#====================#====================#====================#==================#==================#==================
+#_____________________________________________________B-DAY CHECK & NOTIFICATION SYSTEM________________________________#
+
+
+
+
+#====================#====================#====================#==================#==================#==================
+#_____________________________________________________SAVE SYSTEM______________________________________________________#
+
+
+
+
+
+#====================#====================#====================#==================#==================#==================
+#_________________________________________________________UIs__________________________________________________________#
+#_____________________________________________________________Name text-bar "entry":
+name_entry_l = customtkinter.CTkLabel(root, text="Enter Name:", text_color="black", font=COMMON_FONT)
+name_entry_l.place(x=widgets_x_place+2,y=widgets_y_place+370)
+#
+name_entry = customtkinter.CTkEntry(root, bg_color="transparent", fg_color="white", font=COMMON_FONT, text_color="Black", width=250)
+name_entry.place(x=widgets_x_place,y=widgets_y_place+400)
+
+
+#_____________________________________________________________DATE INPUTS: (spin boxes)
+date_ls = customtkinter.CTkLabel(root, text="Enter Name:", text_color="black", font=COMMON_FONT)
+date_ls.place(x=widgets_x_place+2,y=widgets_y_place+370)
+#
+
+
+
+
+#_____________________________________________________________BUTTONS:
+############################FUNCTION
+def add_b_day():
     pass
 
+############################THE BUTTON
+# #0000-Add b-day button
+# ####-------------------------Button Text Labels
+# correct_b__label = customtkinter.CTkLabel(root, text=f"Get Another Card", font=("Courier", 14, "bold"), text_color="Black")
+# correct_b__label.place(x=150+210+buttons_x_displacement,y=400+buttons_y_displacement+100)
+#
+# ####-------------------------BUTTON-ART / IMAGES
+# new_card_b__normal_state_image = customtkinter.CTkImage(light_image=Image.open("images/cards_norm.png"),size=(150, 100))
+# new_card_b__hover_in_image = customtkinter.CTkImage(light_image=Image.open("images/cards_hover.png"),size=(150, 100))
+# new_card_b__clicked_image = customtkinter.CTkImage(light_image=Image.open("images/cards_clicked.png"),size=(150, 100))
+#
+# ####-------------------------BUTTON-MAIN-FUNCTIONS
+# # def new_card_button_event():
+# #----------------------------->THE MAIN FUNCTION OF THIS BUTTON ISS GETTING A NEW CARD ->  picking_state()
+#
+# ####-------------------------BUTTON-CONSTRUCTION Widget
+# new_card_mark_button = customtkinter.CTkButton(root, image=new_card_b__normal_state_image , text="", height=50, width=150,command=add_b_day, fg_color="transparent",border_width=0, hover=False)
+# new_card_mark_button.place(x=150+210+buttons_x_displacement,y=400+buttons_y_displacement)
+#
+# ####-------------------------BUTTON-Aesthetic-functions
+# #----HOVER
+# def new_card_b_hover_in(event):
+#     new_card_mark_button.configure(image=new_card_b__hover_in_image)
+# def new_card_b_hover_out(event):
+#     new_card_mark_button.configure(image=new_card_b__normal_state_image)
+# #bind events:
+# new_card_mark_button.bind("<Enter>", new_card_b_hover_in)
+# new_card_mark_button.bind("<Leave>", new_card_b_hover_out)
+#
+# #----CLICK-STATE
+# def new_card_b_clicked(event):
+#     new_card_mark_button.configure(image=new_card_b__clicked_image)
+# def new_card_b_unclicked(event):
+#     new_card_mark_button.configure(image=new_card_b__normal_state_image)
+# #bind events:
+# new_card_mark_button.bind("<ButtonPress-1>", new_card_b_clicked)
+# new_card_mark_button.bind("<ButtonRelease-1>", new_card_b_unclicked)
 
-
-
-
-
-
-#_____________________________________________________________Starting the code with:
-run_code()
 
 
 #==============END
