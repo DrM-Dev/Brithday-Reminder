@@ -41,19 +41,13 @@ root.title(f"Birthday Reminder {ver}")
 
 #====================Logo / Icons:
 #----bitmap
-# root.iconbitmap("images/StatesFlashGame_bitmap.ico") #<---------------ADD A BIT MAP & LOGO
+root.iconbitmap("images/cake_bitmap.ico") #<---------------ADD A BIT MAP & LOGO
+
 #----logo:
 # logo = customtkinter.CTkImage(light_image=Image.open("images/LOGO_T_Black.png"),size=(110,100))
 # logo_label = customtkinter.CTkLabel(root ,text="", fg_color="transparent" ,image=logo, bg_color="transparent")
 # logo_label.place(x=5,y=180)
 
-
-
-#BIRTHDAY CAKE GIF# :3
-# import ctk_gif_class
-#
-# XXXXXX_gif = ctk_gif_class.CTkGIFLabel(root,gif_path="images/XXXXXX.gif") #200x100 is ideal + #no need to start animation, it's part of its __init__ implementation
-# XXXXXX_gif.place(x=window_width/4+590,y=window_height/4+30)
 
 #====================Globals:
 birthday_entry = {
@@ -71,13 +65,20 @@ b_year = 0
 #--------------------------
 #-------------Widgets displacement
 widgets_x_place = 20
-widgets_y_place = 20
+widgets_y_place = 10
 #|
 buttons_x_displacement = 100
 buttons_y_displacement = 100
 #|
 widgets_background = "pink"
 
+
+##################APP BANNER GIF# :)
+import ctk_gif_class
+
+banner_gif = ctk_gif_class.CTkGIFLabel(root,gif_path="images/bday_reminder_banner.gif") #200x100 is ideal + #no need to start animation, it's part of its __init__ implementation
+banner_gif.initiate_animation()
+banner_gif.place(x=widgets_x_place-35,y=widgets_y_place+100)
 
 #______________________________________________________________
 print('''                                                                                                                                                  
@@ -284,7 +285,7 @@ start_tracking_time = False
 
 #-WIDGET:
 date_time_display = CTkLabel(root, text=current_date_data, fg_color="pink", corner_radius=15, text_color="black", font=("Consolas", 20, "bold"))
-date_time_display.place(x=widgets_x_place,y=widgets_y_place)
+date_time_display.place(x=widgets_x_place,y=widgets_y_place+20)
 
 #-FUNCTIONs:
 def updating_date_data():
