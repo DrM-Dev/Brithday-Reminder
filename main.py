@@ -13,6 +13,9 @@ from customtkinter import CTkLabel
 import datetime as dt
 #----gif:
 import ctk_gif_class
+#SYSTEM:
+#----sounds:
+import audio_system
 #----restart:
 import sys
 import os
@@ -179,9 +182,6 @@ year_entry.place(x=widgets_x_place+257+60+x_shift,y=widgets_y_place+460)
 
 
 #_____________________________________________________________BUTTONS:
-
-
-
 #0000#------------------------------ SAVE BIRTHDAY BUTTON!
 # REMINDER\\
 # birthday_entry = {
@@ -293,9 +293,11 @@ start_over_button.bind("<ButtonRelease-1>", start_over_b_unclicked)
 
 
 #_____________________________________________________________Today's Date & Time:
-#-GLOBAL VAR:
+#-GLOBAL VARs:
 current_date_data = ""
 start_tracking_time = False
+#
+online = False
 
 #-WIDGET:
 date_time_display = CTkLabel(root, text=current_date_data, fg_color="pink", corner_radius=15, text_color="black", font=("Consolas", 20, "bold"))
@@ -313,6 +315,7 @@ def updating_date_data():
 
 def calculate_date_data():
     global current_date_data
+    global online
     ##############
     #-----------------------------------------------------------------UPDATE Date-Time
     now = dt.datetime.now()
@@ -350,12 +353,15 @@ def calculate_date_data():
     #
     if start_tracking_time:
         updating_date_data()
-
+    ###################################################
+    # startup sound after opening window:
+    # -----------------------Start-Up sound:
+    if not online:
+        audio_system.startup_sound()
+        online = True
 
 #-----------------------Start tracking time:
 updating_date_data()
-#-----------------------Trigger time tracking loop to start:
-
 
 
 #==============END
