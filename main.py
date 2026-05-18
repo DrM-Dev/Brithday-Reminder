@@ -3,7 +3,7 @@ import time
 from pandas.core.window.doc import kwargs_scipy
 from rdflib.plugins.sparql.parserutils import value
 
-ver = "0.1.1"
+ver = "0.1.1.12"
 #====================IMPORTS:
 from tkinter import *
 import customtkinter
