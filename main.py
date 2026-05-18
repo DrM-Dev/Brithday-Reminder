@@ -13,7 +13,9 @@ from customtkinter import CTkLabel
 import datetime as dt
 #----gif:
 import ctk_gif_class
-#SYSTEM:
+#SYSTEMs:
+#----save:
+import data_manager
 #----sounds:
 import audio_system
 #----restart:
@@ -32,7 +34,7 @@ customtkinter.set_default_color_theme("dark-blue")
 root = customtkinter.CTk()
 root.configure(fg_color=BACKGROUND_COLOR)
 #
-window_width = 600
+window_width = 660
 window_height = 600
 #
 root.minsize(window_width,window_height)
@@ -45,24 +47,20 @@ root.title(f"Birthday Reminder {ver}")
 #----bitmap
 root.iconbitmap("images/cake_bitmap.ico") #<---------------ADD A BIT MAP & LOGO
 
-#----logo:
-# logo = customtkinter.CTkImage(light_image=Image.open("images/LOGO_T_Black.png"),size=(110,100))
-# logo_label = customtkinter.CTkLabel(root ,text="", fg_color="transparent" ,image=logo, bg_color="transparent")
-# logo_label.place(x=5,y=180)
+# #----version on banner: #PLACED DOWN (near the main-loop) to place it on TOP!
+# ver_num = customtkinter.CTkLabel(root ,text=f"{ver}", fg_color="transparent", bg_color="transparent", font=("Consolas", 14, "bold"))
+# ver_num.place(x=5,y=180)
 
 
 #====================Globals:
 birthday_entry = {
     "name" : "",
-    "b_day" : 0,
-    "b_month" : 0,
+    "b_day" : (0,0),
     "b_year" : 0
 }
-#--------------------------
-birthday = [0,0,0] # day/month/year A LIST to be stored
-b_day = 0
-b_month = 0
-b_year = 0
+#old:
+# b_day = (0,0) #stored as a tuple
+# b_year = 0
 #--------------------------
 #-------------Widgets displacement
 widgets_x_place = 20
@@ -128,12 +126,13 @@ print(f"**** WELCOME TO Birthday-Reminder {ver}   -by-    Dr.M-Dev ****")
 #====================#====================#====================#==================#==================#==================
 #====================#====================#====================#==================#==================#==================
 #_____________________________________________________B-DAY CHECK & NOTIFICATION SYSTEM________________________________#
-
+# sort through data.json and check (day,month) if it matches a list of day/month from (0,0) to (30,12)
 
 
 
 #====================#====================#====================#==================#==================#==================
 #_____________________________________________________SAVE SYSTEM______________________________________________________#
+#ALL IN data_manager.py
 
 
 
@@ -141,6 +140,8 @@ print(f"**** WELCOME TO Birthday-Reminder {ver}   -by-    Dr.M-Dev ****")
 
 #====================#====================#====================#==================#==================#==================
 #_________________________________________________________UIs__________________________________________________________#
+
+#___________________________________________________________________________________\\INPUTS:
 #_____________________________________________________________Name text-bar "entry":
 name_entry_l = customtkinter.CTkLabel(root, text="Enter Name:", text_color="black", font=COMMON_FONT)
 name_entry_l.place(x=widgets_x_place+2,y=widgets_y_place+370)
@@ -157,7 +158,7 @@ day_drop_menu_LABEL.place(x=widgets_x_place+197+x_shift,y=widgets_y_place+430)
 #----
 days_list = [str(day+1) for day in range(0,30)] #list configuration
 #
-day_drop_menu = customtkinter.CTkComboBox(root, values=days_list, state="readonly", width=60, fg_color=widgets_background, button_color="hotpink")
+day_drop_menu = customtkinter.CTkComboBox(root, values=days_list, state="readonly",text_color="black", width=60, fg_color=widgets_background, button_color="hotpink")
 day_drop_menu.set("0")
 day_drop_menu.place(x=widgets_x_place+180+x_shift,y=widgets_y_place+460)
 
@@ -167,7 +168,7 @@ month_drop_menu_LABEL.place(x=widgets_x_place+257+x_shift,y=widgets_y_place+430)
 # #----
 months_list = [str(month+1) for month in range(0,12)] #list configuration
 #
-month_drop_menu = customtkinter.CTkComboBox(root, values=months_list, state="readonly", width=60, fg_color=widgets_background, button_color="hotpink")
+month_drop_menu = customtkinter.CTkComboBox(root, values=months_list,text_color="black" , state="readonly", width=60, fg_color=widgets_background, button_color="hotpink")
 month_drop_menu.set("0")
 month_drop_menu.place(x=widgets_x_place+250+x_shift,y=widgets_y_place+460)
 
@@ -186,8 +187,7 @@ year_entry.place(x=widgets_x_place+257+60+x_shift,y=widgets_y_place+460)
 # REMINDER\\
 # birthday_entry = {
 #     "name" : "",
-#     "b_day" : 0,
-#     "b_month" : 0,
+#     "b_day" : (0,0),
 #     "b_year" : 0
 # }
 
@@ -196,12 +196,14 @@ def add_b_day():
     global birthday_entry
     #--#
     birthday_entry["name"] = str(name_entry.get())
-    birthday_entry["b_day"] = str(day_drop_menu.get())
-    birthday_entry["b_month"] = str(month_drop_menu.get())
     birthday_entry["b_year"] = str(year_entry.get())
     #
-    print(f'NOTIFICATION:\nBIRTHDAY DATA SLOT SAVED:\nname:{birthday_entry["name"]} - day:{birthday_entry["b_day"]} - month:{birthday_entry["b_month"]} - year:{birthday_entry["b_year"]}')
-
+    day_data = int(day_drop_menu.get())
+    month_data = int(month_drop_menu.get())
+    birthday_entry["b_day"] = (day_data,month_data)
+    #------------------------------------
+    data_manager.save_file(birthday_entry)
+    #DEBUGS/CHECKS/WARNINGS were moved to data_manager.py
 
 #####-----------------------THE BUTTON
 save_bday_b_x_displace = 250
@@ -214,7 +216,7 @@ b_day_save_b_clicked_img = customtkinter.CTkImage(light_image=Image.open("images
 
 ####-------------------------BUTTON-CONSTRUCTION Widget
 b_day_save_button = customtkinter.CTkButton(root, image=b_day_save_b_norm_img , text="", height=50, width=150,command=add_b_day, fg_color="transparent",border_width=0, hover=False)
-b_day_save_button.place(x=buttons_x_displacement+save_bday_b_x_displace,y=buttons_y_displacement+save_bday_b_y_displace+37)
+b_day_save_button.place(x=buttons_x_displacement+save_bday_b_x_displace-70,y=buttons_y_displacement+save_bday_b_y_displace+37)
 
 ####-------------------------BUTTON-Aesthetic-functions
 #----HOVER
@@ -236,15 +238,12 @@ b_day_save_button.bind("<ButtonPress-1>", b_day_save_b_clicked)
 b_day_save_button.bind("<ButtonRelease-1>", b_day_save_b_unclicked)
 
 ####-------------------------Button Text Labels
-save_b_day_button_l = customtkinter.CTkLabel(root, text=f"Click Me To Save This Birthday", font=COMMON_FONT, text_color="Black")
-save_b_day_button_l.place(x=buttons_x_displacement+save_bday_b_x_displace-35,y=buttons_y_displacement+save_bday_b_y_displace+220)
+save_b_day_button_l = customtkinter.CTkLabel(root, text=f"Save Birthday Date", font=COMMON_FONT, text_color="Black")
+save_b_day_button_l.place(x=buttons_x_displacement+save_bday_b_x_displace-58,y=buttons_y_displacement+save_bday_b_y_displace+220)
 
 
 
-
-
-
-
+#_____________________________________________________
 #0000#------------------------------ START-OVER BUTTON!
 #####-----------------------FUNCTION
 def clear_entries():
@@ -301,7 +300,7 @@ online = False
 
 #-WIDGET:
 date_time_display = CTkLabel(root, text=current_date_data, fg_color="pink", corner_radius=15, text_color="black", font=("Consolas", 20, "bold"))
-date_time_display.place(x=widgets_x_place,y=widgets_y_place-10)
+date_time_display.place(x=widgets_x_place+20,y=widgets_y_place-10)
 
 #-FUNCTIONs:
 def updating_date_data():
@@ -360,9 +359,145 @@ def calculate_date_data():
         audio_system.startup_sound()
         online = True
 
+
+
+
+
+
+
+
+#====================#====================#====================#==================#==================#==================
+#__________________________________________________SECONDARY WINDOW____________________________________________________#
+b_day_list_window_ON = False
+
+def check_dates_list():
+    #__________________________________________________
+    ##################Globals & Data
+    global b_day_list_window_ON
+    b_day_list_window_ON = True  # -->#IMPORTANT SWITCH (to disable click-able & hover images)\\
+    # {-} #
+    print("DEBUG: B-DAYS-LIST window activated")
+    print(f"LANG PICK WINDOW STATE->>{b_day_list_window_ON}")
+    b_day_list_button.configure(image=brows_days_b__disabled_image)
+    b_day_list_button.configure(state="disabled")
+
+    #__________________________________________________
+    ##################Art / Images
+
+    #__________________________________________________
+    ##################SETUP: (establishing window)
+    # ================
+    # ================
+    check_dates_window = customtkinter.CTkToplevel(root)
+    check_dates_window.iconbitmap("images/saved_cake_bitmap.ico")
+    check_dates_window.attributes("-topmost", True) #--------> TO PLACE IT ON TOP
+    #
+    check_dates_window.configure(fg_color=BACKGROUND_COLOR)
+    #
+    check_dates_window.minsize(500, 400)
+    check_dates_window.maxsize(500, 400)
+    check_dates_window.config(padx=20, pady=20)
+    # -------------
+    check_dates_window.title(f"Saved Birthday Dates :)")
+    # ----
+    # #NOW switching this window to TOP LEVEL so it can respond to commands
+    # print("<!> WINDOW-2 is top level now <!>")
+    # customtkinter.CTkToplevel(master=check_dates_window)
+    # ================
+    # ================
+
+
+    #__________________________________________________
+    ################## B-DAYS-LIST-WINDOW-OPTIONS END:
+    def on_closing():
+        #----
+        global b_day_list_window_ON
+        b_day_list_window_ON = False #-->#IMPORTANT SWITCH (to enable click-able & hover images)\\
+        #
+        b_day_list_button.configure(image=brows_days_b__norm_image)
+        b_day_list_button.configure(state="normal")
+        # {-} #
+        print("DEBUG: B-DAYS window IS OFF")
+        print(f"LANG PICK WINDOW STATE->>{b_day_list_window_ON}")
+        #
+        check_dates_window.destroy()  # Explicitly close the window
+
+
+    check_dates_window.protocol("WM_DELETE_WINDOW", on_closing)
+    ################END_mainloop:
+    check_dates_window.mainloop()
+
+
+
+#_________________________OPEN WINDOW-2 (Birthdays List) BUTTON____________________________\\
+#0000-Switch-Lang Button
+browse_bdays_x_displace = 250
+browse_bdays_y_displace = 230
+
+####-------------------------Button Text Labels
+browse_bdays_list__l = customtkinter.CTkLabel(root, text=f"Birthdays List", font=COMMON_FONT, text_color="Black")
+browse_bdays_list__l.place(x=buttons_x_displacement+browse_bdays_x_displace+136,y=buttons_y_displacement+browse_bdays_y_displace+220)
+
+####-------------------------BUTTON-ART / IMAGES
+bbdays_img_width = 200
+bbdays_img_heigh = 120
+brows_days_b__norm_image = customtkinter.CTkImage(light_image=Image.open("images/bday_list_norm.png"),size=(bbdays_img_width+20, bbdays_img_heigh))
+brows_days_b__hover_in_image = customtkinter.CTkImage(light_image=Image.open("images/bday_list_hover.png"),size=(bbdays_img_width, bbdays_img_heigh))
+brows_days_b__clicked_image = customtkinter.CTkImage(light_image=Image.open("images/bday_list_clicked.png"),size=(bbdays_img_width, bbdays_img_heigh))
+brows_days_b__disabled_image = customtkinter.CTkImage(light_image=Image.open("images/bday_list_viewing.png"),size=(bbdays_img_width,bbdays_img_heigh))
+
+####-------------------------BUTTON-MAIN-FUNCTIONS
+# def switchL_button_event():
+#----------------------------->THE MAIN FUNCTION OF THIS BUTTON ISS GETTING A NEW CARD ->  pick_language()
+
+####-------------------------BUTTON-CONSTRUCTION Widget
+b_day_list_button = customtkinter.CTkButton(root, image=brows_days_b__norm_image , text="", height=50, width=150,command=check_dates_list, fg_color="transparent",border_width=0, hover=False)
+b_day_list_button.place(x=buttons_x_displacement+browse_bdays_x_displace+80,y=buttons_y_displacement+browse_bdays_y_displace+80)
+
+####-------------------------BUTTON-Aesthetic-functions
+#----HOVER
+def switchL_b_hover_in(event):
+    global b_day_list_window_ON
+    if not b_day_list_window_ON:
+        b_day_list_button.configure(image=brows_days_b__hover_in_image)
+def switchL_b_hover_out(event):
+    global b_day_list_window_ON
+    if not b_day_list_window_ON:
+        b_day_list_button.configure(image=brows_days_b__norm_image)
+#bind events: ------------------------------------------------------------>AND BOUND TO "LP_Window_State" only allowed when it's FALSE "off"
+b_day_list_button.bind("<Enter>", switchL_b_hover_in)
+b_day_list_button.bind("<Leave>", switchL_b_hover_out)
+
+#----CLICK-STATE
+def switchL_b_clicked(event):
+    global b_day_list_window_ON
+    if not b_day_list_window_ON:
+        b_day_list_button.configure(image=brows_days_b__clicked_image)
+def switchL_b_unclicked(event):
+    global b_day_list_window_ON
+    if not b_day_list_window_ON:
+        b_day_list_button.configure(image=brows_days_b__norm_image)
+#bind events: ------------------------------------------------------------>AND BOUND TO "LP_Window_State" only allowed when it's FALSE "off"
+b_day_list_button.bind("<ButtonPress-1>", switchL_b_clicked)
+b_day_list_button.bind("<ButtonRelease-1>", switchL_b_unclicked)
+
+
+
+
+
+
+
+
+
+
+
+#==============FIRST TRIGGER
 #-----------------------Start tracking time:
 updating_date_data()
 
+#----version on banner:
+ver_num = customtkinter.CTkLabel(root ,text=f"{ver}", fg_color="transparent", bg_color="transparent", font=("Consolas", 12, "bold"), text_color="black", height=8)
+ver_num.place(x=70,y=342)
 
 #==============END
 root.mainloop()
