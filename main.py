@@ -1,6 +1,5 @@
 #Birthday Reminder - ver       by      Dr.M-Dev
 import time
-
 from pandas.core.window.doc import kwargs_scipy
 from rdflib.plugins.sparql.parserutils import value
 
@@ -54,8 +53,7 @@ birthday_entry = {
     "name" : "",
     "b_day" : 0,
     "b_month" : 0,
-    "b_year" : 0,
-    "date_day" : 0
+    "b_year" : 0
 }
 #--------------------------
 birthday = [0,0,0] # day/month/year A LIST to be stored
@@ -78,7 +76,7 @@ import ctk_gif_class
 
 banner_gif = ctk_gif_class.CTkGIFLabel(root,gif_path="images/bday_reminder_banner.gif") #200x100 is ideal + #no need to start animation, it's part of its __init__ implementation
 banner_gif.initiate_animation()
-banner_gif.place(x=widgets_x_place-35,y=widgets_y_place+100)
+banner_gif.place(x=widgets_x_place-35,y=widgets_y_place+60)
 
 #______________________________________________________________
 print('''                                                                                                                                                  
@@ -185,9 +183,25 @@ year_entry.place(x=widgets_x_place+257+60+x_shift,y=widgets_y_place+460)
 
 
 #0000#------------------------------ SAVE BIRTHDAY BUTTON!
+# REMINDER\\
+# birthday_entry = {
+#     "name" : "",
+#     "b_day" : 0,
+#     "b_month" : 0,
+#     "b_year" : 0
+# }
+
 #####-----------------------FUNCTION
 def add_b_day():
-    pass
+    global birthday_entry
+    #--#
+    birthday_entry["name"] = str(name_entry.get())
+    birthday_entry["b_day"] = str(day_drop_menu.get())
+    birthday_entry["b_month"] = str(month_drop_menu.get())
+    birthday_entry["b_year"] = str(year_entry.get())
+    #
+    print(f'NOTIFICATION:\nBIRTHDAY DATA SLOT SAVED:\nname:{birthday_entry["name"]} - day:{birthday_entry["b_day"]} - month:{birthday_entry["b_month"]} - year:{birthday_entry["b_year"]}')
+
 
 #####-----------------------THE BUTTON
 save_bday_b_x_displace = 250
@@ -200,7 +214,7 @@ b_day_save_b_clicked_img = customtkinter.CTkImage(light_image=Image.open("images
 
 ####-------------------------BUTTON-CONSTRUCTION Widget
 b_day_save_button = customtkinter.CTkButton(root, image=b_day_save_b_norm_img , text="", height=50, width=150,command=add_b_day, fg_color="transparent",border_width=0, hover=False)
-b_day_save_button.place(x=buttons_x_displacement+save_bday_b_x_displace,y=buttons_y_displacement+save_bday_b_y_displace)
+b_day_save_button.place(x=buttons_x_displacement+save_bday_b_x_displace,y=buttons_y_displacement+save_bday_b_y_displace+37)
 
 ####-------------------------BUTTON-Aesthetic-functions
 #----HOVER
@@ -223,7 +237,7 @@ b_day_save_button.bind("<ButtonRelease-1>", b_day_save_b_unclicked)
 
 ####-------------------------Button Text Labels
 save_b_day_button_l = customtkinter.CTkLabel(root, text=f"Click Me To Save This Birthday", font=COMMON_FONT, text_color="Black")
-save_b_day_button_l.place(x=buttons_x_displacement+save_bday_b_x_displace-35,y=buttons_y_displacement+save_bday_b_y_displace+190)
+save_b_day_button_l.place(x=buttons_x_displacement+save_bday_b_x_displace-35,y=buttons_y_displacement+save_bday_b_y_displace+220)
 
 
 
@@ -285,7 +299,7 @@ start_tracking_time = False
 
 #-WIDGET:
 date_time_display = CTkLabel(root, text=current_date_data, fg_color="pink", corner_radius=15, text_color="black", font=("Consolas", 20, "bold"))
-date_time_display.place(x=widgets_x_place,y=widgets_y_place+20)
+date_time_display.place(x=widgets_x_place,y=widgets_y_place-10)
 
 #-FUNCTIONs:
 def updating_date_data():
