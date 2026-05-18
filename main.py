@@ -1,14 +1,17 @@
 #Birthday Reminder - ver       by      Dr.M-Dev
+import time
+
+from pandas.core.window.doc import kwargs_scipy
 from rdflib.plugins.sparql.parserutils import value
 
 ver = "0.1.1"
 #====================IMPORTS:
 from tkinter import *
 import customtkinter
-from PIL import ImageTk, Image
-from customtkinter import CTkImage, CTkLabel
-#
-from tkinter import messagebox
+from PIL import Image
+from customtkinter import CTkLabel
+#----time:
+import datetime as dt
 #----gif:
 import ctk_gif_class
 #----restart:
@@ -18,7 +21,7 @@ import os
 
 #====================Font/Colors Constants:
 BACKGROUND_COLOR = "LightYellow"
-COMMON_FONT = ("Courier", 14, "bold")
+COMMON_FONT = ("Consolas", 14, "bold")
 
 #====================SETUP
 customtkinter.set_appearance_mode("dark")
@@ -73,7 +76,7 @@ widgets_y_place = 20
 buttons_x_displacement = 100
 buttons_y_displacement = 100
 #|
-widgets_background = "#343638"
+widgets_background = "pink"
 
 
 #______________________________________________________________
@@ -140,7 +143,7 @@ print(f"**** WELCOME TO Birthday-Reminder {ver}   -by-    Dr.M-Dev ****")
 name_entry_l = customtkinter.CTkLabel(root, text="Enter Name:", text_color="black", font=COMMON_FONT)
 name_entry_l.place(x=widgets_x_place+2,y=widgets_y_place+370)
 #
-name_entry = customtkinter.CTkEntry(root, bg_color="transparent", fg_color=widgets_background, font=COMMON_FONT, text_color="white", width=250)
+name_entry = customtkinter.CTkEntry(root, bg_color="transparent", fg_color=widgets_background, font=COMMON_FONT, text_color="black", width=250)
 name_entry.place(x=widgets_x_place,y=widgets_y_place+400)
 
 
@@ -152,7 +155,7 @@ day_drop_menu_LABEL.place(x=widgets_x_place+197+x_shift,y=widgets_y_place+430)
 #----
 days_list = [str(day+1) for day in range(0,30)] #list configuration
 #
-day_drop_menu = customtkinter.CTkComboBox(root, values=days_list, state="readonly", width=60)
+day_drop_menu = customtkinter.CTkComboBox(root, values=days_list, state="readonly", width=60, fg_color=widgets_background, button_color="hotpink")
 day_drop_menu.set("0")
 day_drop_menu.place(x=widgets_x_place+180+x_shift,y=widgets_y_place+460)
 
@@ -162,7 +165,7 @@ month_drop_menu_LABEL.place(x=widgets_x_place+257+x_shift,y=widgets_y_place+430)
 # #----
 months_list = [str(month+1) for month in range(0,12)] #list configuration
 #
-month_drop_menu = customtkinter.CTkComboBox(root, values=months_list, state="readonly", width=60)
+month_drop_menu = customtkinter.CTkComboBox(root, values=months_list, state="readonly", width=60, fg_color=widgets_background, button_color="hotpink")
 month_drop_menu.set("0")
 month_drop_menu.place(x=widgets_x_place+250+x_shift,y=widgets_y_place+460)
 
@@ -170,8 +173,8 @@ month_drop_menu.place(x=widgets_x_place+250+x_shift,y=widgets_y_place+460)
 year_drop_menu_LABEL = customtkinter.CTkLabel(root, text="Year", text_color="black", font=COMMON_FONT)
 year_drop_menu_LABEL.place(x=widgets_x_place+257+88+x_shift,y=widgets_y_place+430)
 #
-year_drop_entry = customtkinter.CTkEntry(root, bg_color="transparent", fg_color=widgets_background, font=COMMON_FONT, text_color="White", width=112)
-year_drop_entry.place(x=widgets_x_place+257+60+x_shift,y=widgets_y_place+460)
+year_entry = customtkinter.CTkEntry(root, bg_color="transparent", fg_color=widgets_background, font=COMMON_FONT, text_color="black", width=112)
+year_entry.place(x=widgets_x_place+257+60+x_shift,y=widgets_y_place+460)
 
 
 
@@ -219,7 +222,7 @@ b_day_save_button.bind("<ButtonRelease-1>", b_day_save_b_unclicked)
 
 ####-------------------------Button Text Labels
 save_b_day_button_l = customtkinter.CTkLabel(root, text=f"Click Me To Save This Birthday", font=COMMON_FONT, text_color="Black")
-save_b_day_button_l.place(x=buttons_x_displacement+save_bday_b_x_displace-50,y=buttons_y_displacement+save_bday_b_y_displace+190)
+save_b_day_button_l.place(x=buttons_x_displacement+save_bday_b_x_displace-35,y=buttons_y_displacement+save_bday_b_y_displace+190)
 
 
 
@@ -230,8 +233,12 @@ save_b_day_button_l.place(x=buttons_x_displacement+save_bday_b_x_displace-50,y=b
 #0000#------------------------------ START-OVER BUTTON!
 #####-----------------------FUNCTION
 def clear_entries():
-    pass
-
+    name_entry.delete(0, "end")
+    #
+    day_drop_menu.set("0")
+    month_drop_menu.set("0")
+    #
+    year_entry.delete(0, "end")
 
 #####-----------------------THE BUTTON
 start_over_b_x_displace = -60
@@ -243,7 +250,7 @@ start_over_b_hover_img = customtkinter.CTkImage(light_image=Image.open("images/s
 start_over_b_clicked_img = customtkinter.CTkImage(light_image=Image.open("images/startover_clicked.png"),size=(200, 50))
 
 ####-------------------------BUTTON-CONSTRUCTION Widget
-start_over_button = customtkinter.CTkButton(root, image=start_over_b_norm_img , text="", height=50, width=150,command=add_b_day, fg_color="transparent",border_width=0, hover=False)
+start_over_button = customtkinter.CTkButton(root, image=start_over_b_norm_img , text="", height=50, width=150,command=clear_entries, fg_color="transparent",border_width=0, hover=False)
 start_over_button.place(x=buttons_x_displacement+start_over_b_x_displace,y=buttons_y_displacement+start_over_b_y_displace)
 
 ####-------------------------BUTTON-Aesthetic-functions
@@ -265,9 +272,75 @@ def start_over_b_unclicked(event):
 start_over_button.bind("<ButtonPress-1>", start_over_b_clicked)
 start_over_button.bind("<ButtonRelease-1>", start_over_b_unclicked)
 
-
 ####-------------------------Button Text Labels
 #NO NEED it's written on it :)
+
+
+
+#_____________________________________________________________Today's Date & Time:
+#-GLOBAL VAR:
+current_date_data = ""
+start_tracking_time = False
+
+#-WIDGET:
+date_time_display = CTkLabel(root, text=current_date_data, fg_color="pink", corner_radius=15, text_color="black", font=("Consolas", 20, "bold"))
+date_time_display.place(x=widgets_x_place,y=widgets_y_place)
+
+#-FUNCTIONs:
+def updating_date_data():
+    ########################
+    # print("DEBUG: TRACKING STARTED . . . . . .")#<<_DEBUG
+    #
+    calculate_date_data()
+    #
+    root.after(100, updating_date_data)
+
+
+def calculate_date_data():
+    global current_date_data
+    ##############
+    #-----------------------------------------------------------------UPDATE Date-Time
+    now = dt.datetime.now()
+    minute = now.minute
+    hour = now.hour
+    day = now.day
+    month = now.month
+    year = now.year
+    day_of_the_week = ""
+    #
+    day_name = now.weekday()#0->Monday  1->Tuesday 2->Wednesday 3->Thursday 4->Friday 5->Saturday
+    if day_name == 0:
+        day_of_the_week = "Monday"
+    elif day_name == 1:
+        day_of_the_week = "Tuesday"
+    elif day_name == 2:
+        day_of_the_week = "Wednesday"
+    elif day_name == 3:
+        day_of_the_week = "Thursday"
+    elif day_name == 4:
+        day_of_the_week = "Friday"
+    elif day_name == 5:
+        day_of_the_week = "Saturday"
+    else:
+        day_of_the_week = "ERROR Day-Of-Week was not recognised"
+    #-----------------------
+    #DEBUG
+    if minute < 10:
+        current_date_data = f"today's date is:  {hour}:0{minute} - {day_of_the_week} - /{day}/{month}/{year}"
+    else:
+        current_date_data = f"today's date is:  {hour}:{minute} - {day_of_the_week} - /{day}/{month}/{year}"
+    # print(current_date_data) #<<_DEBUG
+    #-----------------------
+    date_time_display.configure(text=current_date_data)
+    #
+    if start_tracking_time:
+        updating_date_data()
+
+
+#-----------------------Start tracking time:
+updating_date_data()
+#-----------------------Trigger time tracking loop to start:
+
 
 
 #==============END
