@@ -439,18 +439,12 @@ def check_dates_list():
     #
     nb_canvas_width = 1000
     nb_canvas_height = 1541
-    notebook_canvas = CTkCanvas(check_dates_window, width=nb_canvas_width, height=nb_canvas_height)
+    notebook_canvas = CTkCanvas(check_dates_window, width=nb_canvas_width, height=nb_canvas_height, background=BACKGROUND_COLOR)
     notebook_canvas.place(x=-20, y=-17)
     #
     notebook_bg = notebook_canvas.create_image( 0,0,image =notebook_bg_img)
     #
     notebook_canvas.moveto(notebook_bg, -5, -2)
-
-    #old:
-    # notebook_bg_img = CTkImage(Image.open("images/notebook_bg.png"), size=(400, 600))
-    # #
-    # notebook_bg_widget = CTkLabel(check_dates_window, text="", image=notebook_bg_img, )
-    # notebook_bg_widget.place(x=-15, y=-15)
 
 
     #__________________________________________________
