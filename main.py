@@ -1,5 +1,7 @@
 #Birthday Reminder - ver       by      Dr.M-Dev
 import time
+
+from numpy.ma.core import size
 from pandas.core.window.doc import kwargs_scipy
 from rdflib.plugins.sparql.parserutils import value
 
@@ -8,7 +10,7 @@ ver = "0.1.1.12"
 from tkinter import *
 import customtkinter
 from PIL import Image, ImageTk
-from customtkinter import CTkLabel, CTkImage
+from customtkinter import CTkLabel, CTkImage, CTkCanvas
 #----time:
 import datetime as dt
 #----gif:
@@ -433,10 +435,22 @@ def check_dates_list():
 
     # __________________________________________________
     ##################Art / Images
-    notebook_bg_img = CTkImage(Image.open("images/notebook_bg.png"), size=(400, 600))
+    notebook_bg_img = PhotoImage(file="images/notebook_bg.png", width=600, height=800)
     #
-    notebook_bg_widget = CTkLabel(check_dates_window, text="", image=notebook_bg_img, )
-    notebook_bg_widget.place(x=-15, y=-15)
+    nb_canvas_width = 1000
+    nb_canvas_height = 1541
+    notebook_canvas = CTkCanvas(check_dates_window, width=nb_canvas_width, height=nb_canvas_height)
+    notebook_canvas.place(x=-20, y=-17)
+    #
+    notebook_bg = notebook_canvas.create_image( 0,0,image =notebook_bg_img)
+    #
+    notebook_canvas.moveto(notebook_bg, -5, -2)
+
+    #old:
+    # notebook_bg_img = CTkImage(Image.open("images/notebook_bg.png"), size=(400, 600))
+    # #
+    # notebook_bg_widget = CTkLabel(check_dates_window, text="", image=notebook_bg_img, )
+    # notebook_bg_widget.place(x=-15, y=-15)
 
 
     #__________________________________________________
