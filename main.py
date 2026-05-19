@@ -7,8 +7,9 @@ ver = "0.1.1.12"
 #====================IMPORTS:
 from tkinter import *
 import customtkinter
-from PIL import Image
-from customtkinter import CTkLabel
+#----UIs:
+from PIL import Image, ImageTk
+from customtkinter import CTkLabel, CTkImage
 #----time:
 import datetime as dt
 #----gif:
@@ -158,7 +159,7 @@ day_drop_menu_LABEL.place(x=widgets_x_place+197+x_shift,y=widgets_y_place+430)
 #----
 days_list = [str(day+1) for day in range(0,30)] #list configuration
 #
-day_drop_menu = customtkinter.CTkComboBox(root, values=days_list, state="readonly",text_color="black", width=60, fg_color=widgets_background, button_color="hotpink")
+day_drop_menu = customtkinter.CTkComboBox(root, values=days_list, state="readonly",text_color="black", width=60, fg_color=widgets_background, dropdown_fg_color="pink", dropdown_text_color="black", dropdown_hover_color="white", button_color="hotpink")
 day_drop_menu.set("0")
 day_drop_menu.place(x=widgets_x_place+180+x_shift,y=widgets_y_place+460)
 
@@ -168,7 +169,7 @@ month_drop_menu_LABEL.place(x=widgets_x_place+257+x_shift,y=widgets_y_place+430)
 # #----
 months_list = [str(month+1) for month in range(0,12)] #list configuration
 #
-month_drop_menu = customtkinter.CTkComboBox(root, values=months_list,text_color="black" , state="readonly", width=60, fg_color=widgets_background, button_color="hotpink")
+month_drop_menu = customtkinter.CTkComboBox(root, values=months_list,text_color="black" , state="readonly", width=60, fg_color=widgets_background, dropdown_fg_color="pink", dropdown_text_color="black", dropdown_hover_color="white" , button_color="hotpink")
 month_drop_menu.set("0")
 month_drop_menu.place(x=widgets_x_place+250+x_shift,y=widgets_y_place+460)
 
@@ -369,6 +370,9 @@ def calculate_date_data():
 #====================#====================#====================#==================#==================#==================
 #__________________________________________________SECONDARY WINDOW____________________________________________________#
 b_day_list_window_ON = False
+####
+saved_cake_bitmap = ImageTk.PhotoImage(Image.open("images/saved_cake_bitmap.ico"))
+
 
 def check_dates_list():
     #__________________________________________________
@@ -377,7 +381,7 @@ def check_dates_list():
     b_day_list_window_ON = True  # -->#IMPORTANT SWITCH (to disable click-able & hover images)\\
     # {-} #
     print("DEBUG: B-DAYS-LIST window activated")
-    print(f"LANG PICK WINDOW STATE->>{b_day_list_window_ON}")
+    print(f"NOTEBOOK WINDOW STATE->>{b_day_list_window_ON}")
     b_day_list_button.configure(image=brows_days_b__disabled_image)
     b_day_list_button.configure(state="disabled")
 
@@ -389,13 +393,18 @@ def check_dates_list():
     # ================
     # ================
     check_dates_window = customtkinter.CTkToplevel(root)
-    check_dates_window.iconbitmap("images/saved_cake_bitmap.ico")
+    #
+    #using GLOBAL saved_cake_bitmap
+    global saved_cake_bitmap
+    # check_dates_window.iconbitmap("images/saved_cake_bitmap.ico")
+    check_dates_window.wm_iconphoto(True, saved_cake_bitmap)
+    #
     check_dates_window.attributes("-topmost", True) #--------> TO PLACE IT ON TOP
     #
     check_dates_window.configure(fg_color=BACKGROUND_COLOR)
     #
-    check_dates_window.minsize(500, 400)
-    check_dates_window.maxsize(500, 400)
+    check_dates_window.minsize(400, 600)
+    check_dates_window.maxsize(400, 600)
     check_dates_window.config(padx=20, pady=20)
     # -------------
     check_dates_window.title(f"Saved Birthday Dates :)")
@@ -404,8 +413,10 @@ def check_dates_list():
     # print("<!> WINDOW-2 is top level now <!>")
     # customtkinter.CTkToplevel(master=check_dates_window)
     # ================
-    # ================
-
+    notebook_bg_img = CTkImage(Image.open("images/notebook_bg.png"), size=(400,600))
+    #
+    notebook_bg_widget = CTkLabel(check_dates_window ,text="", image=notebook_bg_img,)
+    notebook_bg_widget.place(x=0,y=0)
 
     #__________________________________________________
     ################## B-DAYS-LIST-WINDOW-OPTIONS END:
@@ -418,7 +429,7 @@ def check_dates_list():
         b_day_list_button.configure(state="normal")
         # {-} #
         print("DEBUG: B-DAYS window IS OFF")
-        print(f"LANG PICK WINDOW STATE->>{b_day_list_window_ON}")
+        print(f"NOTEBOOK WINDOW STATE->>{b_day_list_window_ON}")
         #
         check_dates_window.destroy()  # Explicitly close the window
 
@@ -430,7 +441,7 @@ def check_dates_list():
 
 
 #_________________________OPEN WINDOW-2 (Birthdays List) BUTTON____________________________\\
-#0000-Switch-Lang Button
+#0000-Switch-NOTEBOOK Button
 browse_bdays_x_displace = 250
 browse_bdays_y_displace = 230
 
@@ -440,15 +451,14 @@ browse_bdays_list__l.place(x=buttons_x_displacement+browse_bdays_x_displace+136,
 
 ####-------------------------BUTTON-ART / IMAGES
 bbdays_img_width = 200
-bbdays_img_heigh = 120
+bbdays_img_heigh = 140
 brows_days_b__norm_image = customtkinter.CTkImage(light_image=Image.open("images/bday_list_norm.png"),size=(bbdays_img_width+20, bbdays_img_heigh))
 brows_days_b__hover_in_image = customtkinter.CTkImage(light_image=Image.open("images/bday_list_hover.png"),size=(bbdays_img_width, bbdays_img_heigh))
 brows_days_b__clicked_image = customtkinter.CTkImage(light_image=Image.open("images/bday_list_clicked.png"),size=(bbdays_img_width, bbdays_img_heigh))
 brows_days_b__disabled_image = customtkinter.CTkImage(light_image=Image.open("images/bday_list_viewing.png"),size=(bbdays_img_width,bbdays_img_heigh))
 
 ####-------------------------BUTTON-MAIN-FUNCTIONS
-# def switchL_button_event():
-#----------------------------->THE MAIN FUNCTION OF THIS BUTTON ISS GETTING A NEW CARD ->  pick_language()
+# are moved above!->  to open notebook window
 
 ####-------------------------BUTTON-CONSTRUCTION Widget
 b_day_list_button = customtkinter.CTkButton(root, image=brows_days_b__norm_image , text="", height=50, width=150,command=check_dates_list, fg_color="transparent",border_width=0, hover=False)
