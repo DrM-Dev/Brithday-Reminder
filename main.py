@@ -7,7 +7,7 @@ ver = "0.1.1.12"
 #====================IMPORTS:
 from tkinter import *
 import customtkinter
-from PIL import Image
+from PIL import Image, ImageTk
 from customtkinter import CTkLabel, CTkImage
 #----time:
 import datetime as dt
@@ -370,6 +370,8 @@ def calculate_date_data():
 #__________________________________________________SECONDARY WINDOW____________________________________________________#
 b_day_list_window_ON = False
 ####
+import second_window_bits
+# taking ->>>>  CheckDatesWindow()
 
 def check_dates_list():
     #__________________________________________________
@@ -386,11 +388,23 @@ def check_dates_list():
     ##################SETUP: (establishing window)
     # ================
     # ================
-    check_dates_window = customtkinter.CTkToplevel(root)
-    #
-    #using bitmap_icon
-    check_dates_window.iconbitmap("images/saved_cake_bitmap.ico")
-    #
+    check_dates_window = second_window_bits.CheckDatesWindow(root)
+    #just to keep the bitmap image online:
+    icon_image = Image.open("images/saved_cake_bitmap.ico")
+    icon_photo = ImageTk.PhotoImage(icon_image)
+    # --
+    check_dates_window.after(200, lambda: check_dates_window.wm_iconphoto(False, icon_photo))
+    # !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    #DEV NOTE:
+    #the title/bitmap were already established in second_window_bits.py in a CLASS
+    #SO no need for these old settings:
+    # check_dates_window = customtkinter.CTkToplevel(root)
+    # check_dates_window.iconbitmap("images/saved_cake_bitmap.ico")
+    # check_dates_window.title(f"Saved Birthday Dates :)")
+    # !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+    # ================
+    # ================minor tweaks:
     check_dates_window.attributes("-topmost", True) #--------> TO PLACE IT ON TOP
     #
     check_dates_window.configure(fg_color=BACKGROUND_COLOR)
@@ -398,14 +412,13 @@ def check_dates_list():
     check_dates_window.minsize(400, 600)
     check_dates_window.maxsize(400, 600)
     check_dates_window.config(padx=20, pady=20)
-    # -------------
-    check_dates_window.title(f"Saved Birthday Dates :)")
-    # ----
+    # ================
+    # ================old implementation: (keep if needed)
     # #NOW switching this window to TOP LEVEL so it can respond to commands
     # print("<!> WINDOW-2 is top level now <!>")
     # customtkinter.CTkToplevel(master=check_dates_window)
-    # ================
-    
+
+
     # __________________________________________________
     ##################Art / Images
     notebook_bg_img = CTkImage(Image.open("images/notebook_bg.png"), size=(400, 600))
