@@ -13,6 +13,7 @@ from customtkinter import CTkLabel, CTkImage
 import datetime as dt
 #----gif:
 import ctk_gif_class
+import single_run_gif
 #SYSTEMs:
 #----save:
 import data_manager
@@ -73,8 +74,6 @@ widgets_background = "pink"
 
 
 ##################APP BANNER GIF# :)
-import ctk_gif_class
-
 banner_gif = ctk_gif_class.CTkGIFLabel(root,gif_path="images/bday_reminder_banner.gif") #200x100 is ideal + #no need to start animation, it's part of its __init__ implementation
 banner_gif.initiate_animation()
 banner_gif.place(x=widgets_x_place-35,y=widgets_y_place+60)
@@ -180,21 +179,29 @@ year_entry = customtkinter.CTkEntry(root, bg_color="transparent", fg_color=widge
 year_entry.place(x=widgets_x_place+257+60+x_shift,y=widgets_y_place+460)
 
 
-
-
 #_____________________________________________________________BUTTONS:
 #0000#------------------------------ SAVE BIRTHDAY BUTTON!
-# REMINDER\\
-# birthday_entry = {
-#     "name" : "",
-#     "b_day" : (0,0),
-#     "b_year" : 0
-# }
+save_noti_widget = single_run_gif.SingleGIFLabel(root,gif_path="images/saved_note.gif",gif_width=150,gif_height=55) #200x100 is ideal + #no need to start animation, it's part of its __init__ implementation
+#
+save_noti_widget.place(x=widgets_x_place+1000,y=widgets_y_place+1000) #<---------CURRENTLY place it out of bounds "hide"
+# save_noti_widget.show_gif() #<-----use this to show gif
+
+
 
 #####-----------------------FUNCTION
+# def remove_save_notification():
+#     save_noti_widget.place(x=widgets_x_place + 1000, y=widgets_y_place + 1000)
+
 def add_b_day():
     global birthday_entry
     #--#
+    # REMINDER\\ data-slot structure:
+    # birthday_entry = {
+    #     "name" : "",
+    #     "b_day" : (0,0),
+    #     "b_year" : 0
+    # }
+    #
     birthday_entry["name"] = str(name_entry.get())
     birthday_entry["b_year"] = str(year_entry.get())
     #
@@ -204,6 +211,11 @@ def add_b_day():
     #------------------------------------
     data_manager.save_file(birthday_entry)
     #DEBUGS/CHECKS/WARNINGS were moved to data_manager.py
+    #------------------------------------
+    save_noti_widget.show_gif()
+    save_noti_widget.place(x=widgets_x_place+430,y=widgets_y_place+340)
+    # root.after(100, remove_save_notification)
+
 
 #####-----------------------THE BUTTON
 save_bday_b_x_displace = 250
@@ -300,7 +312,7 @@ online = False
 
 #-WIDGET:
 date_time_display = CTkLabel(root, text=current_date_data, fg_color="pink", corner_radius=15, text_color="black", font=("Consolas", 20, "bold"))
-date_time_display.place(x=widgets_x_place+20,y=widgets_y_place-10)
+date_time_display.place(x=widgets_x_place+20,y=widgets_y_place-15)
 
 #-FUNCTIONs:
 def updating_date_data():
@@ -424,7 +436,7 @@ def check_dates_list():
     notebook_bg_img = CTkImage(Image.open("images/notebook_bg.png"), size=(400, 600))
     #
     notebook_bg_widget = CTkLabel(check_dates_window, text="", image=notebook_bg_img, )
-    notebook_bg_widget.place(x=0, y=0)
+    notebook_bg_widget.place(x=-15, y=-15)
 
 
     #__________________________________________________
@@ -517,7 +529,7 @@ updating_date_data()
 
 #----version on banner:
 ver_num = customtkinter.CTkLabel(root ,text=f"{ver}", fg_color="transparent", bg_color="transparent", font=("Consolas", 12, "bold"), text_color="black", height=8)
-ver_num.place(x=70,y=342)
+ver_num.place(x=70,y=343)
 
 #==============END
 root.mainloop()

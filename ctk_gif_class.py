@@ -2,7 +2,6 @@
 import customtkinter as ctkinter
 from PIL import Image
 
-
 class CTkGIFLabel(ctkinter.CTkLabel):
     def __init__(self, master, gif_path, **kwargs):
         # Extract frames using Pillow
@@ -23,5 +22,4 @@ class CTkGIFLabel(ctkinter.CTkLabel):
         self._frame_index = (self._frame_index + 1) % len(self._frames)
         self.configure(image=self._frames[self._frame_index])
         # Update based on GIF frame duration (e.g., 100ms)
-        self.after(100, self.initiate_animation)
-
+        self.after(50, self.initiate_animation)
