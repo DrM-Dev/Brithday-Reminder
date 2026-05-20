@@ -543,7 +543,7 @@ def check_dates_list():
 
     # ____________________________________________________________________________________________________
     # ===================================Page Number Display:
-    page_number_display = notebook_canvas.create_text(48, 702,
+    page_number_display = notebook_canvas.create_text(220, 712,
                                                text=f"",
                                                font=("Consolas", 12, "bold"),
                                                fill="red",
@@ -578,7 +578,7 @@ def check_dates_list():
             flip_page(1)
             print(f"displaying PAGE1")
         #---- updating page number display:
-        notebook_canvas.itemconfig(page_number_display, text=f"P:{current_page_n}")
+        notebook_canvas.itemconfig(page_number_display, text=f"Page:{current_page_n}")
     #|
     #|
     ########################### TO START DISPLAY
@@ -600,10 +600,56 @@ def check_dates_list():
     # _____________________________________________________BUTTONS\\
     # 0000#------------------------------ FLIP PAGE BUTTON!
     #####-----------------------FUNCTION
-    flip_page_button = CTkButton(check_dates_window , text="Flip Page", command=flip_forward, font=COMMON_FONT,
-                                 text_color="black", fg_color="pink", hover_color="#E75480",
-                                 corner_radius=20)
-    flip_page_button.place(x=120,y=540)
+    #flip_forward() --> the function is placed above :)
+    #####-----------------------THE BUTTON
+    flip_page_b_x_displace = 4
+    flip_page_b_y_displace = 30
+    # 0000-Add b-day button
+    ####-------------------------BUTTON-ART / IMAGES
+    flip_forward_b_norm_img = customtkinter.CTkImage(light_image=Image.open("images/flip_page_norm.png"),
+                                                      size=(40, 40))
+    flip_forward_b_hover_img = customtkinter.CTkImage(light_image=Image.open("images/flip_page_hover.png"),
+                                                       size=(40, 40))
+    flip_forward_b_clicked_img = customtkinter.CTkImage(light_image=Image.open("images/flip_page_clicked.png"),
+                                                     size=(40, 40))
+    ####-------------------------BUTTON-CONSTRUCTION Widget
+    flip_forward__button = customtkinter.CTkButton(check_dates_window, image=flip_forward_b_norm_img, text="",
+                                                    height=40, width=40,
+                                                    command=flip_forward, fg_color="#ffffff", border_width=1,
+                                                    hover=False)
+    flip_forward__button.place(x=flip_page_b_x_displace, y=flip_page_b_y_displace)
+    ####-------------------------BUTTON-Aesthetic-functions
+    # ----HOVER
+    def flip_forward_b_hover_in(event):
+        flip_forward__button.configure(image=flip_forward_b_hover_img)
+
+    def flip_forward_b_hover_out(event):
+        flip_forward__button.configure(image=flip_forward_b_norm_img)
+
+    # bind events:
+    flip_forward__button.bind("<Enter>", flip_forward_b_hover_in)
+    flip_forward__button.bind("<Leave>", flip_forward_b_hover_out)
+
+    # ----CLICK-STATE
+    def flip_forward_b_clicked(event):
+        flip_forward__button.configure(image=flip_forward_b_clicked_img)
+
+    def flip_forward_b_unclicked(event):
+        flip_forward__button.configure(image=flip_forward_b_norm_img)
+
+    # bind events:
+    flip_forward__button.bind("<ButtonPress-1>", flip_forward_b_clicked)
+    flip_forward__button.bind("<ButtonRelease-1>", flip_forward_b_unclicked)
+    #-----------------
+    #TESTING PROTOTYPE SETUP:
+    # flip_page_button = CTkButton(check_dates_window , text="Flip Page", command=flip_forward, font=("Consolas", 12, "bold"),
+    #                              text_color="black", fg_color="pink", hover_color="#E75480",
+    #                              width=25,
+    #                              height=18,
+    #                              corner_radius=20)
+    # flip_page_button.place(x=150,y=562)
+
+
 
     # _____________________________________________________
     # 0000#------------------------------ CLEAR STORAGE BUTTON!
@@ -647,25 +693,22 @@ def check_dates_list():
 
 
 
-
-
-
-
     #####-----------------------THE BUTTON
-    clean_storage_b_x_displace = 301
-    clean_storage_b_y_displace = 512
+    clean_storage_b_x_displace = 4
+    clean_storage_b_y_displace = 80
+    delete_b_dimension = 40
     # 0000-Add b-day button
     ####-------------------------BUTTON-ART / IMAGES
     clean_storage_b_norm_img = customtkinter.CTkImage(light_image=Image.open("images/delete_b_norm.png"),
-                                                      size=(50, 50))
-    clean_storage_b_hover_img = customtkinter.CTkImage(light_image=Image.open("images/delete_b_clicked.png"), #<change the hover to click
-                                                    size=(50, 50))                                          #looks better
-    flip_page_b_clicked_img = customtkinter.CTkImage(light_image=Image.open("images/delete_b_norm.png"),      #<scarpped that and turned it to
-                                                      size=(50, 50))                                        #"norm".
+                                                      size=(delete_b_dimension, delete_b_dimension))
+    clean_storage_b_hover_img = customtkinter.CTkImage(light_image=Image.open("images/delete_b_hover.png"),
+                                                    size=(delete_b_dimension, delete_b_dimension))
+    flip_page_b_clicked_img = customtkinter.CTkImage(light_image=Image.open("images/delete_b_clicked.png"),
+                                                      size=(delete_b_dimension, delete_b_dimension))
 
     ####-------------------------BUTTON-CONSTRUCTION Widget
-    clean_storage__button = customtkinter.CTkButton(check_dates_window, image=clean_storage_b_norm_img, text="", height=50, width=50,
-                                                command=select_date_to_remove, fg_color="transparent", border_width=0,
+    clean_storage__button = customtkinter.CTkButton(check_dates_window, image=clean_storage_b_norm_img, text="", height=delete_b_dimension, width=delete_b_dimension,
+                                                command=select_date_to_remove, fg_color="#ffffff", border_width=1,
                                                 hover=False)
     clean_storage__button.place(x=clean_storage_b_x_displace,y=clean_storage_b_y_displace)
 
