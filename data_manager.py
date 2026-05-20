@@ -5,7 +5,7 @@ from pathlib import Path
 import messagebox #->> use message box on customtkinter!
 
 
-#--------------------------------- SAVE SYSTEM
+#++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++SAVE SYSTEM
 def save_file(birthday_entry):
     ############
     birthday_name = birthday_entry["name"]
@@ -76,15 +76,58 @@ def save_file(birthday_entry):
         print("[-----------------DATA PROCESSING COMPLETED [0] ----------------]")
 
 
+
+
+#++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++RECALL SYSTEM
+def recall_saved_data():
+    recalled_data_slots = [] #<-A list of all stored JSON birthday-dictionaries
+    # _____________________________
+    # DATA TEMPLATE:
+    data_slot = {
+        f"TEST": {
+            #
+            "Day": f"{0}",
+            "Month": f"{0}",
+            "Year": f"{0}",
+        }
+    }
+    # _____________________________
+    try:
+        with open(r"data/data.json", "r") as data_file:
+            recovered_data = json.load(data_file)
+        # ----
+        for data_slot in recovered_data.items():
+            data_slot_piece = "" #<-Empty DATA-SLOT
+            if data_slot[1]["Day"] == "0" or data_slot[1]["Month"] == "0" or data_slot[0] == "TEST": #<-----detect & skip any empty data-slot
+                print("EMPTY DATA-SLOT SKIPPED")
+            else:
+                data_slot_piece = f"{data_slot[0]} b-day: {data_slot[1]["Day"]}/{data_slot[1]["Month"]}/{data_slot[1]["Year"]}"
+                #----#
+                recalled_data_slots.append(data_slot_piece)
+        # ----
+        print("[------------------------------------DATA SLOTS RECOVERED [+] -----------------------------------]")
+        return recalled_data_slots
+
+    except FileNotFoundError:
+        messagebox.showerror(title="DATA FOLDER MOVED!",
+                             message="data folder have been moved/deleted\n restart the program to start over :)")
+        ####
+        Path("data").mkdir(exist_ok=True)
+        ####
+        # +++++++++++++++++++++++++++
+        print("file created")
+        with open(r"data/data.json", "w") as data_file:
+            json.dump(data_slot, data_file, indent=4)
+        ####
+        print("[-----------------FILE NOT FOUND! NEW FILE WAS MADE, NO DATA SLOTS RECOVERED [-] ----------------]")
+
+
 ###################TESTING:
-birthday_entry = {
-    "name" : "TEST2",
-    "b_day" : (2,2),
-    "b_year" : 2002
-}
-
-save_file(birthday_entry)
-
-
-
-
+# birthday_entry = {
+#     "name" : "TEST",
+#     "b_day" : (2,2),
+#     "b_year" : 2002
+# }
+# save_file(birthday_entry)
+#__________________________
+# print(f"{recall_saved_data()}\n{type(recall_saved_data())}")

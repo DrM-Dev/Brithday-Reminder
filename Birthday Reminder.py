@@ -1,6 +1,7 @@
 #Birthday Reminder - ver       by      Dr.M-Dev
 import time
 
+import messagebox
 from numpy.ma.core import size
 from pandas.core.window.doc import kwargs_scipy
 from rdflib.plugins.sparql.parserutils import value
@@ -10,7 +11,7 @@ ver = "0.1.1.12"
 from tkinter import *
 import customtkinter
 from PIL import Image, ImageTk
-from customtkinter import CTkLabel, CTkImage, CTkCanvas
+from customtkinter import CTkLabel, CTkImage, CTkCanvas, CTkButton
 #----time:
 import datetime as dt
 #----gif:
@@ -211,12 +212,15 @@ def add_b_day():
     month_data = int(month_drop_menu.get())
     birthday_entry["b_day"] = (day_data,month_data)
     #------------------------------------
-    data_manager.save_file(birthday_entry)
-    #DEBUGS/CHECKS/WARNINGS were moved to data_manager.py
-    #------------------------------------
-    save_noti_widget.show_gif()
-    save_noti_widget.place(x=widgets_x_place+430,y=widgets_y_place+340)
-    # root.after(100, remove_save_notification)
+    if len(str(name_entry.get())) > 18:
+        messagebox.showwarning(title="Long Name", message="A first name should not exceed 18 letters :)")
+    else:
+        data_manager.save_file(birthday_entry)
+        #DEBUGS/CHECKS/WARNINGS were moved to data_manager.py
+        #------------------------------------
+        save_noti_widget.show_gif()
+        save_noti_widget.place(x=widgets_x_place+430,y=widgets_y_place+340)
+        # root.after(100, remove_save_notification)
 
 
 #####-----------------------THE BUTTON
@@ -386,9 +390,11 @@ b_day_list_window_ON = False
 ####
 import second_window_bits
 # taking ->>>>  CheckDatesWindow()
+####
+current_page_n = 1 #by default
 
 def check_dates_list():
-    #__________________________________________________
+    #____________________________________________________________________________________________________
     ##################Globals & Data
     global b_day_list_window_ON
     b_day_list_window_ON = True  # -->#IMPORTANT SWITCH (to disable click-able & hover images)\\
@@ -398,7 +404,7 @@ def check_dates_list():
     b_day_list_button.configure(image=brows_days_b__disabled_image)
     b_day_list_button.configure(state="disabled")
 
-    #__________________________________________________
+    #____________________________________________________________________________________________________
     ##################SETUP: (establishing window)
     # ================
     # ================
@@ -433,21 +439,100 @@ def check_dates_list():
     # customtkinter.CTkToplevel(master=check_dates_window)
 
 
-    # __________________________________________________
+    # ____________________________________________________________________________________________________
     ##################Art / Images
-    notebook_bg_img = PhotoImage(file="images/notebook_bg.png", width=600, height=800)
-    #
     nb_canvas_width = 1000
     nb_canvas_height = 1541
     notebook_canvas = CTkCanvas(check_dates_window, width=nb_canvas_width, height=nb_canvas_height, background=BACKGROUND_COLOR)
     notebook_canvas.place(x=-20, y=-17)
+    #----------------------------------BG:
+    notebook_bg_img = PhotoImage(file="images/notebook_bg.png", width=600, height=800)
     #
     notebook_bg = notebook_canvas.create_image( 0,0,image =notebook_bg_img)
-    #
     notebook_canvas.moveto(notebook_bg, -5, -2)
 
 
-    #__________________________________________________
+    # ____________________________________________________________________________________________________
+    ##################Text / Days-Tracker #->data_manager.py
+    stored_data_slots = data_manager.recall_saved_data()
+    #====
+    slots_count = 0
+    text_output_page1 = ""
+    text_output_page2 = ""
+    text_output_page3 = ""
+    text_output_page4 = ""
+    #4page limit because WHO has more than 120 birthdays to remember!?
+    #PLUS 4 is my fav number :)
+    #====
+    text_display = notebook_canvas.create_text(100, -2,
+                                               text=f"",
+                                               font=("Consolas", 15, "bold"),
+                                               fill="black",
+                                               justify="left",
+                                               anchor="nw")
+
+    #==================================Function & Sorting:
+    def flip_page(page):
+        global current_page_n
+        #-----------
+        if page == 1:
+            notebook_canvas.itemconfig(text_display, text=f"{text_output_page1}")
+            print(f"displaying PAGE{page}")
+        elif page == 2:
+            notebook_canvas.itemconfig( text_display,text=f"{text_output_page2}")
+            print(f"displaying PAGE{page}")
+        elif page == 3:
+            notebook_canvas.itemconfig( text_display,text=f"{text_output_page3}")
+            print(f"displaying PAGE{page}")
+        elif page == 4:
+            notebook_canvas.itemconfig( text_display,text=f"{text_output_page4}")
+            print(f"displaying PAGE{page}")
+        else:
+            # when 4 < page > 0 then we restart to page 1 :)
+            current_page_n = 1
+            flip_page(1)
+            print(f"displaying PAGE1")
+        #--------DEBUG:
+
+    #----------------------------------
+    for data_slots in stored_data_slots:
+        if slots_count < 30:
+            text_output_page1 += f"\n{data_slots}"
+        elif slots_count < 60:
+            text_output_page2 += f"\n{data_slots}"
+        elif slots_count < 90:
+            text_output_page3 += f"\n{data_slots}"
+        elif slots_count < 120:
+            text_output_page4 += f"\n{data_slots}"
+        else:
+            print("test_ERROR") #DEBUG
+        # ----count slot:
+        slots_count += 1
+    print(f"SLOTS COUNT: {slots_count}")
+    #----------------------------------SHOWING 1st PAGE by default: "text_output_page1" [every page has 30 lines]
+    flip_page(1)
+    #|
+    #|
+    #===================================#Page Flip Buttons:
+    # current_page_n -> is 1 #by default
+    #--
+    def flip_forward():
+        global current_page_n
+        current_page_n +=1
+        flip_page(current_page_n)
+        #DEBUG:
+        print("+FLIP-FORWARD")
+
+    def flip_backward():
+        global current_page_n
+        current_page_n -= 1
+        flip_page(current_page_n)
+
+    flip_page_button = CTkButton(check_dates_window , text="FLIP PAGE", command=flip_forward)
+    flip_page_button.place(x=100,y=100)
+
+
+    #____________________________________________________________________________________________________
     ################## B-DAYS-LIST-WINDOW-OPTIONS END:
     def on_closing():
         #----
