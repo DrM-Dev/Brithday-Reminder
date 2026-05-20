@@ -125,9 +125,20 @@ print('''
  ''')
 
 print(f"**** WELCOME TO Birthday-Reminder {ver}   -by-    Dr.M-Dev ****")
+
+#====================#====================#====================#==================#==================#==================
+#_____________________________________________________RESTART SYSTEM______________________________________________________#
+#RETRY:
+def restart():
+    """Restarts the current Python script."""
+    python = sys.executable
+    os.execl(python, python, *sys.argv)
+
+
 #====================#====================#====================#==================#==================#==================
 #====================#====================#====================#==================#==================#==================
 #_____________________________________________________B-DAY CHECK & NOTIFICATION SYSTEM________________________________#
+#ALL IN birthday_detector.py
 # sort through data.json and check (day,month) if it matches a list of day/month from (0,0) to (30,12)
 
 
@@ -135,8 +146,6 @@ print(f"**** WELCOME TO Birthday-Reminder {ver}   -by-    Dr.M-Dev ****")
 #====================#====================#====================#==================#==================#==================
 #_____________________________________________________SAVE SYSTEM______________________________________________________#
 #ALL IN data_manager.py
-
-
 
 
 
@@ -217,6 +226,12 @@ def add_b_day():
     else:
         data_manager.save_file(birthday_entry)
         #DEBUGS/CHECKS/WARNINGS were moved to data_manager.py
+        #------------------------------------
+        restart_check = data_manager.save_file(birthday_entry)
+        if str(restart_check) == "404":
+            restart()
+        else:
+            print(f"RECALL-RESTART-ERROR===============>{restart_check}")
         #------------------------------------
         save_noti_widget.show_gif()
         save_noti_widget.place(x=widgets_x_place+430,y=widgets_y_place+340)
@@ -455,6 +470,11 @@ def check_dates_list():
     # ____________________________________________________________________________________________________
     ##################Text / Days-Tracker #->data_manager.py
     stored_data_slots = data_manager.recall_saved_data()
+    # ------------------------------------
+    if stored_data_slots == "404":
+        restart()
+    else:
+        print(f"RECALL-SAVE-ERROR===============>{stored_data_slots}")
     #====
     slots_count = 0
     text_output_page1 = ""
@@ -528,8 +548,58 @@ def check_dates_list():
         current_page_n -= 1
         flip_page(current_page_n)
 
+    # _____________________________________________________BUTTONS\\
+    # 0000#------------------------------ FLIP PAGE BUTTON!
+    #####-----------------------FUNCTION
     flip_page_button = CTkButton(check_dates_window , text="FLIP PAGE", command=flip_forward)
     flip_page_button.place(x=100,y=100)
+
+    # _____________________________________________________
+    # 0000#------------------------------ CLEAR STORAGE BUTTON!
+    #####-----------------------FUNCTION
+    def delete_data_slot():
+        data_manager.delete_date()
+
+    #####-----------------------THE BUTTON
+    flip_page_b_x_displace = -60
+    flip_page_b_y_displace = 410
+    # 0000-Add b-day button
+    ####-------------------------BUTTON-ART / IMAGES
+    clean_storage_b_norm_img = customtkinter.CTkImage(light_image=Image.open("images/delete_b_norm.png"),
+                                                      size=(100, 100))
+    clean_storage_b_hover_img = customtkinter.CTkImage(light_image=Image.open("images/delete_b_hover.png"),
+                                                    size=(100, 100))
+    flip_page_b_clicked_img = customtkinter.CTkImage(light_image=Image.open("images/delete_b_clicked.png"),
+                                                      size=(100, 100))
+
+    ####-------------------------BUTTON-CONSTRUCTION Widget
+    clean_storage__button = customtkinter.CTkButton(check_dates_window, image=clean_storage_b_norm_img, text="", height=50, width=100,
+                                                command=delete_data_slot, fg_color="transparent", border_width=0,
+                                                hover=False)
+    clean_storage__button.place(x=100,y=100)
+
+    ####-------------------------BUTTON-Aesthetic-functions
+    # ----HOVER
+    def clean_storage_b_hover_in(event):
+        clean_storage__button.configure(image=clean_storage_b_hover_img)
+
+    def clean_storage_b_hover_out(event):
+        clean_storage__button.configure(image=clean_storage_b_norm_img)
+
+    # bind events:
+    clean_storage__button.bind("<Enter>", clean_storage_b_hover_in)
+    clean_storage__button.bind("<Leave>", clean_storage_b_hover_out)
+
+    # ----CLICK-STATE
+    def clean_storage_b_clicked(event):
+        clean_storage__button.configure(image=flip_page_b_clicked_img)
+
+    def clean_storage_b_unclicked(event):
+        clean_storage__button.configure(image=clean_storage_b_norm_img)
+
+    # bind events:
+    clean_storage__button.bind("<ButtonPress-1>", clean_storage_b_clicked)
+    clean_storage__button.bind("<ButtonRelease-1>", clean_storage_b_unclicked)
 
 
     #____________________________________________________________________________________________________

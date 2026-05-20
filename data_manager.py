@@ -56,6 +56,11 @@ def save_file(birthday_entry):
             json.dump(data_slot, data_file, indent=4)
         ####
         print("[-----------------FILE NOT FOUND! NEW FILE WAS MADE, DATA SLOT WAS NOT SAVED [-] ----------------]")
+        ####
+        #ACTIVATE RESTART:
+        print("ACTIVATING RESTART BECAUSE FileNotFoundError in save_file()")
+        restart_code = "404"
+        return restart_code
 
     #-----------------------JSON-CODE-ERROR (if data.json) was tampered with:
     except JSONDecodeError:
@@ -70,7 +75,11 @@ def save_file(birthday_entry):
             json.dump(data_slot, data_file, indent=4)
         ####
         print("[-----------------FILE NOT FOUND! NEW FILE WAS MADE, DATA SLOT WAS NOT SAVED [-] ----------------]")
-
+        ####
+        # ACTIVATE RESTART:
+        print("ACTIVATING RESTART BECAUSE JSONDecodeError in save_file()")
+        restart_code = "404"
+        return restart_code
     #--------save check
     finally:
         print("[-----------------DATA PROCESSING COMPLETED [0] ----------------]")
@@ -107,7 +116,7 @@ def recall_saved_data():
         # ----
         print("[------------------------------------DATA SLOTS RECOVERED [+] -----------------------------------]")
         return recalled_data_slots
-
+    #----
     except FileNotFoundError:
         messagebox.showerror(title="DATA FOLDER MOVED!",
                              message="data folder have been moved/deleted\n restart the program to start over :)")
@@ -120,6 +129,51 @@ def recall_saved_data():
             json.dump(data_slot, data_file, indent=4)
         ####
         print("[-----------------FILE NOT FOUND! NEW FILE WAS MADE, NO DATA SLOTS RECOVERED [-] ----------------]")
+        ####
+        # ACTIVATE RESTART:
+        print("ACTIVATING RESTART BECAUSE FileNotFoundError in recall_saved_data()")
+        restart_code = "404"
+        return restart_code
+    #----
+    except JSONDecodeError:
+        messagebox.showerror(title="DATA FOLDER CHANGED!",
+                             message="data.json was altered \n restart the program to start over :)")
+        ####
+        Path("data").mkdir(exist_ok=True)
+        ####
+        # +++++++++++++++++++++++++++
+        print("file created")
+        with open(r"data/data.json", "w") as data_file:
+            json.dump(data_slot, data_file, indent=4)
+        ####
+        print("[-----------------FILE NOT FOUND! NEW FILE WAS MADE, NO DATA SLOTS RECOVERED [-] ----------------]")
+        ####
+        # ACTIVATE RESTART:
+        print("ACTIVATING RESTART BECAUSE JSONDecodeError in recall_saved_data()")
+        restart_code = "404"
+        return restart_code
+
+
+
+#xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxCEALR STORAGE
+def delete_date():
+    with open(r"data/data.json", "r") as data_file:
+        data = json.load(data_file)  # --> TAKING stored data
+        #--
+        key_name = messagebox.askquestion(title="Deleting A Birthday Date", message="Pick which birthday date to delete, by writing it's exact name").lower()
+        #--
+        try:
+            if key_name != "":
+                del data[f"{key_name}"] # --> Altering "deleting" a Data-slot
+                ####
+                with open('data.json', 'w') as file: # --> Assembling everything back together
+                    json.dump(data, file, indent=4)
+        except KeyError:
+            messagebox.showwarning(title="WRONG NAME", message="The date you wanted to delete had a typo, or doesn't exist! try again :(")
+    #------------------------------------
+    # DEBUG
+    print(f"[-----------------DATA SLOT -{key_name}- WAS REMOVED [!] ----------------]")
+
 
 
 ###################TESTING:
