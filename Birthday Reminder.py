@@ -582,8 +582,9 @@ def check_dates_list():
     # _____________________________________________________BUTTONS\\
     # 0000#------------------------------ FLIP PAGE BUTTON!
     #####-----------------------FUNCTION
-    flip_page_button = CTkButton(check_dates_window , text="FLIP PAGE", command=flip_forward)
-    flip_page_button.place(x=100,y=100)
+    flip_page_button = CTkButton(check_dates_window , text="FLIP PAGE", command=flip_forward, font=COMMON_FONT,
+                                 text_color="black", fg_color="pink",  corner_radius=20)
+    flip_page_button.place(x=100,y=540)
 
     # _____________________________________________________
     # 0000#------------------------------ CLEAR STORAGE BUTTON!
@@ -632,8 +633,8 @@ def check_dates_list():
 
 
     #####-----------------------THE BUTTON
-    clean_storage_b_x_displace = 100
-    clean_storage_b_y_displace = 100
+    clean_storage_b_x_displace = 301
+    clean_storage_b_y_displace = 512
     # 0000-Add b-day button
     ####-------------------------BUTTON-ART / IMAGES
     clean_storage_b_norm_img = customtkinter.CTkImage(light_image=Image.open("images/delete_b_norm.png"),
