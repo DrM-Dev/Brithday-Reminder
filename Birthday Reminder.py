@@ -396,21 +396,27 @@ def calculate_date_data():
 
 
 
-
-
-
 #====================#====================#====================#==================#==================#==================
 #__________________________________________________SECONDARY WINDOW____________________________________________________#
 b_day_list_window_ON = False
-####
+####Imports:
 import second_window_bits
 # taking ->>>>  CheckDatesWindow()
-####
+####Globals:
 current_page_n = 1 #by default
+stored_data_slots = []
+#
+slots_count = 0
+text_output_page1 = ""
+text_output_page2 = ""
+text_output_page3 = ""
+text_output_page4 = ""
 
 def check_dates_list():
     #____________________________________________________________________________________________________
     ##################Globals & Data
+    global stored_data_slots
+    #--
     global b_day_list_window_ON
     b_day_list_window_ON = True  # -->#IMPORTANT SWITCH (to disable click-able & hover images)\\
     # {-} #
@@ -469,31 +475,75 @@ def check_dates_list():
 
     # ____________________________________________________________________________________________________
     ##################Text / Days-Tracker #->data_manager.py
-    stored_data_slots = data_manager.recall_saved_data()
-    # ------------------------------------
-    if stored_data_slots == "404":
-        restart()
-    else:
-        print(f"RECALL-SAVE-ERROR===============>{stored_data_slots}")
-    #====
-    slots_count = 0
-    text_output_page1 = ""
-    text_output_page2 = ""
-    text_output_page3 = ""
-    text_output_page4 = ""
-    #4page limit because WHO has more than 120 birthdays to remember!?
-    #PLUS 4 is my fav number :)
-    #====
     text_display = notebook_canvas.create_text(100, -2,
                                                text=f"",
                                                font=("Consolas", 15, "bold"),
                                                fill="black",
                                                justify="left",
                                                anchor="nw")
+    #------------------------------
+    # ==== # needed refresh:
+    slots_count = 0
+    text_output_page1 = ""
+    text_output_page2 = ""
+    text_output_page3 = ""
+    text_output_page4 = ""
+    # ===
+    def update_data_slots_display():
+        global current_page_n
+        #
+        global stored_data_slots
+        stored_data_slots = data_manager.recall_saved_data()
+        # ------------------------------------
+        if stored_data_slots == "404":
+            restart()
+        else:
+            print(f"RECALL-SAVE-ERROR===============>{stored_data_slots}")
+        # ==== # needed refresh:
+        global slots_count
+        global text_output_page1
+        global text_output_page2
+        global text_output_page3
+        global text_output_page4
+        #4page limit because WHO has more than 120 birthdays to remember!?
+        #PLUS 4 is my fav number :)
+        #====
+        # ----------------------------------Clean Pages for update:
+        text_output_page1 = ""  # clear
+        text_output_page2 = ""  # clear
+        text_output_page3 = ""  # clear
+        text_output_page4 = ""  # clear
 
+        # ----------------------------------
+        for data_slots in stored_data_slots:
+            if slots_count < 30:
+                text_output_page1 += f"\n{data_slots}"
+            elif slots_count < 60:
+                text_output_page2 += f"\n{data_slots}"
+            elif slots_count < 90:
+                text_output_page3 += f"\n{data_slots}"
+            elif slots_count < 120:
+                text_output_page4 += f"\n{data_slots}"
+            else:
+                print("test_ERROR")  # DEBUG
+            # ----count slot:
+            slots_count += 1
+        print(f"SLOTS COUNT: {slots_count}")
+        # ----------------------------------SHOWING 1st PAGE by default: "text_output_page1" [every page has 30 lines]
+        #====
+        current_page_n = 1 #reset page back to 1
+        flip_page(current_page_n)
+    # ____________________________________________________________________________________________________
     #==================================Function & Sorting:
     def flip_page(page):
         global current_page_n
+        #
+        global text_output_page1
+        global text_output_page2
+        global text_output_page3
+        global text_output_page4
+        #-----------hard reset:
+        notebook_canvas.itemconfig(text_display, text="") #clearing display
         #-----------
         if page == 1:
             notebook_canvas.itemconfig(text_display, text=f"{text_output_page1}")
@@ -512,25 +562,11 @@ def check_dates_list():
             current_page_n = 1
             flip_page(1)
             print(f"displaying PAGE1")
-        #--------DEBUG:
-
-    #----------------------------------
-    for data_slots in stored_data_slots:
-        if slots_count < 30:
-            text_output_page1 += f"\n{data_slots}"
-        elif slots_count < 60:
-            text_output_page2 += f"\n{data_slots}"
-        elif slots_count < 90:
-            text_output_page3 += f"\n{data_slots}"
-        elif slots_count < 120:
-            text_output_page4 += f"\n{data_slots}"
-        else:
-            print("test_ERROR") #DEBUG
-        # ----count slot:
-        slots_count += 1
-    print(f"SLOTS COUNT: {slots_count}")
-    #----------------------------------SHOWING 1st PAGE by default: "text_output_page1" [every page has 30 lines]
-    flip_page(1)
+    #|
+    #|
+    ########################### TO START DISPLAY
+    update_data_slots_display()
+    ###########################
     #|
     #|
     #===================================#Page Flip Buttons:
@@ -543,11 +579,6 @@ def check_dates_list():
         #DEBUG:
         print("+FLIP-FORWARD")
 
-    def flip_backward():
-        global current_page_n
-        current_page_n -= 1
-        flip_page(current_page_n)
-
     # _____________________________________________________BUTTONS\\
     # 0000#------------------------------ FLIP PAGE BUTTON!
     #####-----------------------FUNCTION
@@ -556,27 +587,67 @@ def check_dates_list():
 
     # _____________________________________________________
     # 0000#------------------------------ CLEAR STORAGE BUTTON!
-    #####-----------------------FUNCTION
-    def delete_data_slot():
-        data_manager.delete_date()
+    #####-----------------------FUNCTIONs
+    def select_date_to_remove():
+        # 2. Pass 'root' as the master to stop the flashing window glitch
+        dialog = customtkinter.CTkInputDialog(
+            text="<!>\nWrite the name of the person/entry\nto delete the date related to it:",
+            title="Deleting A Birthday Date",
+            fg_color=BACKGROUND_COLOR, #->red
+            entry_fg_color="#E75480",#->pink
+            button_fg_color="#E75480",#->pink
+            button_hover_color="#8B0000",#->dark-red
+            entry_text_color="#000000",#->black
+            button_text_color="#000000",#->black
+            text_color="#000000",#->black
+            font=COMMON_FONT
+        )
+        # _____________________________
+        dialog.iconbitmap("images/saved_cake_bitmap.ico")
+        # _____________________________Getting input:
+        user_input = dialog.get_input()
+        # _____________________________
+        if user_input is not None:
+            if user_input.strip() == "":
+                messagebox.showinfo(title="No Name Entered", message="Please write a birthday date name to remove!")
+            else:
+                data_manager.delete_date(user_input)
+        else:
+            messagebox.showinfo(title="Deletion Canceled",
+                                message="Nothing was deleted, retuning to note book browser :)")
+        #_________________________________________
+        #________________________________old setup:
+        # data_slot_name = delete_dialog_window.open_input_dialog()
+        # data_manager.delete_date(data_slot_name)
+        ###
+        ### ON CLOSING DIALOG WINDOW:
+        #UPDATING NOTEBOOK TEXT DISPLAY ANYWAY!!!!! here:
+        print("<!> closing dialog window + UPDATING NOTEBOOK DISPLAY <!>")
+        update_data_slots_display()
+
+
+
+
+
+
 
     #####-----------------------THE BUTTON
-    flip_page_b_x_displace = -60
-    flip_page_b_y_displace = 410
+    clean_storage_b_x_displace = 100
+    clean_storage_b_y_displace = 100
     # 0000-Add b-day button
     ####-------------------------BUTTON-ART / IMAGES
     clean_storage_b_norm_img = customtkinter.CTkImage(light_image=Image.open("images/delete_b_norm.png"),
-                                                      size=(100, 100))
-    clean_storage_b_hover_img = customtkinter.CTkImage(light_image=Image.open("images/delete_b_hover.png"),
-                                                    size=(100, 100))
-    flip_page_b_clicked_img = customtkinter.CTkImage(light_image=Image.open("images/delete_b_clicked.png"),
-                                                      size=(100, 100))
+                                                      size=(50, 50))
+    clean_storage_b_hover_img = customtkinter.CTkImage(light_image=Image.open("images/delete_b_clicked.png"), #<change the hover to click
+                                                    size=(50, 50))                                          #looks better
+    flip_page_b_clicked_img = customtkinter.CTkImage(light_image=Image.open("images/delete_b_norm.png"),      #<scarpped that and turned it to
+                                                      size=(50, 50))                                        #"norm".
 
     ####-------------------------BUTTON-CONSTRUCTION Widget
-    clean_storage__button = customtkinter.CTkButton(check_dates_window, image=clean_storage_b_norm_img, text="", height=50, width=100,
-                                                command=delete_data_slot, fg_color="transparent", border_width=0,
+    clean_storage__button = customtkinter.CTkButton(check_dates_window, image=clean_storage_b_norm_img, text="", height=50, width=50,
+                                                command=select_date_to_remove, fg_color="transparent", border_width=0,
                                                 hover=False)
-    clean_storage__button.place(x=100,y=100)
+    clean_storage__button.place(x=clean_storage_b_x_displace,y=clean_storage_b_y_displace)
 
     ####-------------------------BUTTON-Aesthetic-functions
     # ----HOVER

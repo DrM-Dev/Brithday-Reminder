@@ -3,7 +3,7 @@ from json import JSONDecodeError
 from pathlib import Path
 #
 import messagebox #->> use message box on customtkinter!
-
+#
 
 #++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++SAVE SYSTEM
 def save_file(birthday_entry):
@@ -156,18 +156,22 @@ def recall_saved_data():
 
 
 #xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxCEALR STORAGE
-def delete_date():
+def delete_date(key_name):
     with open(r"data/data.json", "r") as data_file:
         data = json.load(data_file)  # --> TAKING stored data
         #--
-        key_name = messagebox.askquestion(title="Deleting A Birthday Date", message="Pick which birthday date to delete, by writing it's exact name").lower()
+        # key_name = messagebox.askquestion(title="Deleting A Birthday Date", message="Pick which birthday date to delete, by writing it's exact name").lower()
         #--
         try:
+            #----------------
             if key_name != "":
-                del data[f"{key_name}"] # --> Altering "deleting" a Data-slot
+                #Altering "deleting" a Data-slot\\ (making it empty)
+                del data[f"{key_name}"]
                 ####
-                with open('data.json', 'w') as file: # --> Assembling everything back together
+                with open("data/data.json", "w") as file: # --> Assembling everything back together
                     json.dump(data, file, indent=4)
+            #----------------NOTIFICATION:
+            messagebox.showinfo(title="Target Acquired", message=f"Birthday entry [{key_name}] have been deleted!")
         except KeyError:
             messagebox.showwarning(title="WRONG NAME", message="The date you wanted to delete had a typo, or doesn't exist! try again :(")
     #------------------------------------
