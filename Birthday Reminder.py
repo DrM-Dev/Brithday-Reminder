@@ -515,21 +515,27 @@ def check_dates_list():
         text_output_page4 = ""  # clear
 
         # ----------------------------------
-        # slots_grabbed = 0
+        slots_grabbed = 0
+        slots_count = 0
+        #--
         for data_slots in stored_data_slots:
-            if slots_count < 30:
+            if slots_grabbed < 30:
                 text_output_page1 += f"\n{data_slots}"
-            elif slots_count < 60:
+                slots_grabbed +=1
+            elif slots_grabbed < 60:
                 text_output_page2 += f"\n{data_slots}"
-            elif slots_count < 90:
+                slots_grabbed +=1
+            elif slots_grabbed < 90:
                 text_output_page3 += f"\n{data_slots}"
-            elif slots_count < 120:
+                slots_grabbed +=1
+            elif slots_grabbed < 120:
                 text_output_page4 += f"\n{data_slots}"
+                slots_grabbed +=1
             else:
-                print("test_ERROR")  # DEBUG
+                print("<!> DATA SLOTS OVERFLOW <!>")  # DEBUG
             # ----count slot:
             slots_count += 1
-        print(f"SLOTS COUNT: {slots_count}")
+        print(f"SLOTS COUNT: SLOTS COUNT:{slots_count} & SLOTS GRABBED:{slots_grabbed} ")
         # ----------------------------------SHOWING 1st PAGE by default: "text_output_page1" [every page has 30 lines]
         #====
         current_page_n = 1 #reset page back to 1
