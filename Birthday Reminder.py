@@ -6,7 +6,7 @@ from numpy.ma.core import size
 from pandas.core.window.doc import kwargs_scipy
 from rdflib.plugins.sparql.parserutils import value
 
-ver = "0.1.1.12"
+ver = "0.1.1.21"
 #====================IMPORTS:
 from tkinter import *
 import customtkinter
