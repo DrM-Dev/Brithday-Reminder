@@ -515,6 +515,7 @@ def check_dates_list():
         text_output_page4 = ""  # clear
 
         # ----------------------------------
+        # slots_grabbed = 0
         for data_slots in stored_data_slots:
             if slots_count < 30:
                 text_output_page1 += f"\n{data_slots}"
@@ -533,7 +534,15 @@ def check_dates_list():
         #====
         current_page_n = 1 #reset page back to 1
         flip_page(current_page_n)
+
     # ____________________________________________________________________________________________________
+    # ===================================Page Number Display:
+    page_number_display = notebook_canvas.create_text(48, 702,
+                                               text=f"",
+                                               font=("Consolas", 12, "bold"),
+                                               fill="red",
+                                               justify="left",
+                                               anchor="nw")
     #==================================Function & Sorting:
     def flip_page(page):
         global current_page_n
@@ -562,6 +571,8 @@ def check_dates_list():
             current_page_n = 1
             flip_page(1)
             print(f"displaying PAGE1")
+        #---- updating page number display:
+        notebook_canvas.itemconfig(page_number_display, text=f"P:{current_page_n}")
     #|
     #|
     ########################### TO START DISPLAY
@@ -579,12 +590,14 @@ def check_dates_list():
         #DEBUG:
         print("+FLIP-FORWARD")
 
+
     # _____________________________________________________BUTTONS\\
     # 0000#------------------------------ FLIP PAGE BUTTON!
     #####-----------------------FUNCTION
-    flip_page_button = CTkButton(check_dates_window , text="FLIP PAGE", command=flip_forward, font=COMMON_FONT,
-                                 text_color="black", fg_color="pink",  corner_radius=20)
-    flip_page_button.place(x=100,y=540)
+    flip_page_button = CTkButton(check_dates_window , text="Flip Page", command=flip_forward, font=COMMON_FONT,
+                                 text_color="black", fg_color="pink", hover_color="#E75480",
+                                 corner_radius=20)
+    flip_page_button.place(x=120,y=540)
 
     # _____________________________________________________
     # 0000#------------------------------ CLEAR STORAGE BUTTON!
@@ -594,7 +607,7 @@ def check_dates_list():
         dialog = customtkinter.CTkInputDialog(
             text="<!>\nWrite the name of the person/entry\nto delete the date related to it:",
             title="Deleting A Birthday Date",
-            fg_color=BACKGROUND_COLOR, #->red
+            fg_color=BACKGROUND_COLOR,
             entry_fg_color="#E75480",#->pink
             button_fg_color="#E75480",#->pink
             button_hover_color="#8B0000",#->dark-red
