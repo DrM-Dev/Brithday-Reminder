@@ -235,7 +235,8 @@ def add_b_day():
         #------------------------------------
         save_noti_widget.show_gif()
         save_noti_widget.place(x=widgets_x_place+430,y=widgets_y_place+340)
-        # root.after(100, remove_save_notification)
+        #
+        audio_system.save_file_sound()
 
 
 #####-----------------------THE BUTTON
@@ -255,6 +256,7 @@ b_day_save_button.place(x=buttons_x_displacement+save_bday_b_x_displace-70,y=but
 #----HOVER
 def b_day_save_b_hover_in(event):
     b_day_save_button.configure(image=b_day_save_b_hover_img)
+    audio_system.light_candle_sound()
 def b_day_save_b_hover_out(event):
     b_day_save_button.configure(image=b_day_save_b_norm_img)
 #bind events:
@@ -286,6 +288,8 @@ def clear_entries():
     month_drop_menu.set("0")
     #
     year_entry.delete(0, "end")
+    #
+    audio_system.erase_input_sound()
 
 #####-----------------------THE BUTTON
 start_over_b_x_displace = -60
@@ -543,7 +547,7 @@ def check_dates_list():
 
     # ____________________________________________________________________________________________________
     # ===================================Page Number Display:
-    page_number_display = notebook_canvas.create_text(220, 712,
+    page_number_display = notebook_canvas.create_text(217, 712,
                                                text=f"",
                                                font=("Consolas", 12, "bold"),
                                                fill="red",
@@ -578,7 +582,7 @@ def check_dates_list():
             flip_page(1)
             print(f"displaying PAGE1")
         #---- updating page number display:
-        notebook_canvas.itemconfig(page_number_display, text=f"Page:{current_page_n}")
+        notebook_canvas.itemconfig(page_number_display, text=f"Page:{current_page_n}/4")
     #|
     #|
     ########################### TO START DISPLAY
@@ -593,6 +597,7 @@ def check_dates_list():
         global current_page_n
         current_page_n +=1
         flip_page(current_page_n)
+        audio_system.flip_page_sound()
         #DEBUG:
         print("+FLIP-FORWARD")
 
@@ -655,7 +660,8 @@ def check_dates_list():
     # 0000#------------------------------ CLEAR STORAGE BUTTON!
     #####-----------------------FUNCTIONs
     def select_date_to_remove():
-        # 2. Pass 'root' as the master to stop the flashing window glitch
+        audio_system.delete_button_clicked_sound()
+        #
         dialog = customtkinter.CTkInputDialog(
             text="<!>\nWrite the name of the person/entry\nto delete the date related to it:",
             title="Deleting A Birthday Date",
@@ -789,6 +795,7 @@ def switchL_b_hover_in(event):
     global b_day_list_window_ON
     if not b_day_list_window_ON:
         b_day_list_button.configure(image=brows_days_b__hover_in_image)
+        audio_system.open_notebook_sound()
 def switchL_b_hover_out(event):
     global b_day_list_window_ON
     if not b_day_list_window_ON:
