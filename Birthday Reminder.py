@@ -1,5 +1,4 @@
 #Birthday Reminder - ver       by      Dr.M-Dev
-import time
 
 import messagebox
 from numpy.ma.core import size
@@ -375,8 +374,11 @@ def calculate_date_data():
         day_of_the_week = "Friday"
     elif day_name == 5:
         day_of_the_week = "Saturday"
+    elif day_name == 6:
+        day_of_the_week = "Sunday"
     else:
         day_of_the_week = "ERROR Day-Of-Week was not recognised"
+        print(f"{day_of_the_week}\nWRITE TODAY AS NUMBER {now.weekday()}")
     #-----------------------
     #DEBUG
     if minute < 10:
