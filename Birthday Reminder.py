@@ -1,16 +1,13 @@
 #Birthday Reminder - ver       by      Dr.M-Dev
 
-import messagebox
-from numpy.ma.core import size
-from pandas.core.window.doc import kwargs_scipy
-from rdflib.plugins.sparql.parserutils import value
 
-ver = "0.1.1.21"
+
+ver = "0.1.1.31"
 #====================IMPORTS:
 from tkinter import *
 import customtkinter
 from PIL import Image, ImageTk
-from customtkinter import CTkLabel, CTkImage, CTkCanvas, CTkButton
+from customtkinter import CTkLabel, CTkCanvas
 #----time:
 import datetime as dt
 #----gif:
@@ -26,6 +23,7 @@ import audio_system
 #----restart:
 import sys
 import os
+import messagebox
 
 
 #====================Font/Colors Constants:
@@ -197,7 +195,7 @@ year_entry.place(x=widgets_x_place+257+60+x_shift,y=widgets_y_place+460)
 save_noti_widget = single_run_gif.SingleGIFLabel(root,gif_path="images/saved_note.gif",gif_width=150,gif_height=55) #200x100 is ideal + #no need to start animation, it's part of its __init__ implementation
 #
 save_noti_widget.place(x=widgets_x_place+1000,y=widgets_y_place+1000) #<---------CURRENTLY place it out of bounds "hide"
-# save_noti_widget.show_gif() #<-----use this to show gif
+# save_noti_widget.show_gif() #<-----use this to show GIF
 
 
 
@@ -377,7 +375,6 @@ def calculate_date_data():
     day = now.day
     month = now.month
     year = now.year
-    day_of_the_week = ""
     #
     day_name = now.weekday()#0->Monday  1->Tuesday 2->Wednesday 3->Thursday 4->Friday 5->Saturday
     if day_name == 0:
@@ -776,7 +773,9 @@ def check_dates_list():
         # {-} #
         print("DEBUG: B-DAYS window IS OFF")
         print(f"LANG PICK WINDOW STATE->>{b_day_list_window_ON}")
-        #
+        # --- #
+        audio_system.closing_dates_book()
+        # --- #
         check_dates_window.destroy()  # Explicitly close the window
 
 
