@@ -17,8 +17,10 @@ import datetime as dt
 import ctk_gif_class
 import single_run_gif
 #SYSTEMs:
-#----save:
+#----save & recover:
 import data_manager
+#----date calculations:
+import scanning_nearest_date
 #----sounds:
 import audio_system
 #----restart:
@@ -331,14 +333,31 @@ start_over_button.bind("<ButtonRelease-1>", start_over_b_unclicked)
 #-GLOBAL VARs:
 current_date_data = ""
 start_tracking_time = False
-#
 online = False
+#----
+nearest_date_data = ""
 
-#-WIDGET:
+#-WIDGETs:
 date_time_display = CTkLabel(root, text=current_date_data, fg_color="pink", corner_radius=15, text_color="black", font=("Consolas", 20, "bold"))
 date_time_display.place(x=widgets_x_place+20,y=widgets_y_place-15)
+#--------
+nearest_bday_display = CTkLabel(root, text=nearest_date_data, fg_color="red", corner_radius=15, text_color="black", font=("Consolas", 20, "bold"))
+nearest_bday_display.place(x=widgets_x_place,y=widgets_y_place+25)
 
 #-FUNCTIONs:
+def display_nearest_birthday():
+    global nearest_date_data
+    # ------------------------------
+    date_data = scanning_nearest_date.calculate_nearest_birthday()
+    # ------------------------------
+    if date_data != ("",0):
+        nearest_date_data = f"ALERT: only {date_data[1]}-DAYS LEFT! until {date_data[0]}'s BIRTHDAY "
+        nearest_bday_display.configure(text=nearest_date_data)
+    else:
+        nearest_date_data = f"There are 0 dates saved in the system, go and add a new \"cake\" day ;)"
+
+
+############################################
 def updating_date_data():
     ########################
     # print("DEBUG: TRACKING STARTED . . . . . .")#<<_DEBUG
@@ -346,8 +365,7 @@ def updating_date_data():
     calculate_date_data()
     #
     root.after(100, updating_date_data)
-
-
+#------------------------
 def calculate_date_data():
     global current_date_data
     global online
@@ -382,9 +400,9 @@ def calculate_date_data():
     #-----------------------
     #DEBUG
     if minute < 10:
-        current_date_data = f"today's date is:  {hour}:0{minute} - {day_of_the_week} - /{day}/{month}/{year}"
+        current_date_data = f"today's date is:  {hour}:0{minute} - {day_of_the_week} - {day}/{month}/{year}"
     else:
-        current_date_data = f"today's date is:  {hour}:{minute} - {day_of_the_week} - /{day}/{month}/{year}"
+        current_date_data = f"today's date is:  {hour}:{minute} - {day_of_the_week} - {day}/{month}/{year}"
     # print(current_date_data) #<<_DEBUG
     #-----------------------
     date_time_display.configure(text=current_date_data)
@@ -397,6 +415,8 @@ def calculate_date_data():
     if not online:
         audio_system.startup_sound()
         online = True
+        #----
+        display_nearest_birthday()
 
 
 
