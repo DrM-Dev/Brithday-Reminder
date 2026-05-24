@@ -61,6 +61,16 @@ def delete_button_clicked_sound():
     except FileNotFoundError:
         print(
             f"{sound} audio-file was NOT FOUND in [C:\Windows\Media\cding.wav] ")
+#--------
+def deleting_data_slot_sound():
+    # ------------------tada.mp3
+    sound = "crumble_paper_sound.wav"
+    try:
+        winsound.PlaySound(fr"audio\{sound}", winsound.SND_FILENAME | winsound.SND_ASYNC
+                           )
+    except FileNotFoundError:
+        print(
+            f"{sound} audio-file was NOT FOUND in [C:\Windows\Media\cding.wav] ")
 #________________________________________________
 def flip_page_sound():
     # ------------------tada.mp3

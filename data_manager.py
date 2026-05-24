@@ -4,6 +4,7 @@ from pathlib import Path
 #
 import messagebox #->> use message box on customtkinter!
 #
+import audio_system
 
 #++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++SAVE SYSTEM
 def save_file(birthday_entry):
@@ -177,6 +178,7 @@ def delete_date(key_name):
     #------------------------------------
     # DEBUG
     print(f"[-----------------DATA SLOT -{key_name}- WAS REMOVED [!] ----------------]")
+    audio_system.deleting_data_slot_sound()
 
 
 

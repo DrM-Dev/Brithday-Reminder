@@ -341,8 +341,8 @@ nearest_date_data = ""
 date_time_display = CTkLabel(root, text=current_date_data, fg_color="pink", corner_radius=15, text_color="black", font=("Consolas", 20, "bold"))
 date_time_display.place(x=widgets_x_place+20,y=widgets_y_place-15)
 #--------
-nearest_bday_display = CTkLabel(root, text=nearest_date_data, fg_color="red", corner_radius=15, text_color="black", font=("Consolas", 20, "bold"))
-nearest_bday_display.place(x=widgets_x_place,y=widgets_y_place+25)
+nearest_bday_display = CTkLabel(root, text=nearest_date_data, fg_color="red", corner_radius=15, text_color="black", font=("Consolas", 20, "bold"), anchor="w")
+nearest_bday_display.place(x=widgets_x_place+15,y=widgets_y_place+25)
 
 #-FUNCTIONs:
 def display_nearest_birthday():
@@ -351,7 +351,7 @@ def display_nearest_birthday():
     date_data = scanning_nearest_date.calculate_nearest_birthday()
     # ------------------------------
     if date_data != ("",0):
-        nearest_date_data = f"ALERT: only {date_data[1]}-DAYS LEFT! until {date_data[0]}'s BIRTHDAY "
+        nearest_date_data = f"ALERT: only {date_data[1]}-DAYS LEFT until {date_data[0]}'s birthday!"
         nearest_bday_display.configure(text=nearest_date_data)
     else:
         nearest_date_data = f"There are 0 dates saved in the system, go and add a new \"cake\" day ;)"
