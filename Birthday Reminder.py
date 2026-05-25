@@ -212,7 +212,21 @@ def add_b_day():
     #
     birthday_entry["name"] = str(name_entry.get())
     birthday_entry["b_year"] = str(year_entry.get())
+    #------------------------------------
+    year_check = year_entry.get()
+    year_checked = False #by default
+    #-----------
+    numbers_only = [str(n) for n in range(0,10)]
+    print(numbers_only) #DEBUG
     #
+    for char in list(year_check):
+        if str(char) not in numbers_only:
+            year_checked = False
+            break
+        else:
+            year_checked = True
+    print(f"YEAR CHECK = {year_checked}")
+    # xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx #
     day_data = int(day_drop_menu.get())
     month_data = int(month_drop_menu.get())
     birthday_entry["b_day"] = (day_data,month_data)
@@ -227,6 +241,8 @@ def add_b_day():
         messagebox.showwarning(title="NO Month", message="To save a birthday, you must give it a month!")
     elif len(str(year_entry.get())) == 0:
         messagebox.showwarning(title="NO Year", message="To save a birthday, you should give it a year!")
+    elif not year_checked:
+        messagebox.showwarning(title="Invalid Year", message="Just use numbers NO LETTERS!")
     else:
         data_manager.save_file(birthday_entry)
         #DEBUGS/CHECKS/WARNINGS were moved to data_manager.py
@@ -648,8 +664,6 @@ def check_dates_list():
         if just_added_new_date:
             update_data_slots_display()
             just_added_new_date = False
-            #
-            # flip_forward__button.configure(image=flip_forward_b_hover_img)
 
     # _____________________________________________________BUTTONS\\
     # 0000#------------------------------ FLIP PAGE BUTTON!
@@ -672,24 +686,39 @@ def check_dates_list():
                                                     command=flip_forward, fg_color="#ffffff", border_width=1,
                                                     hover=False)
     flip_forward__button.place(x=flip_page_b_x_displace, y=flip_page_b_y_displace)
-    ####-------------------------BUTTON-Aesthetic-functions
-    # ----HOVER
-    def flip_forward_b_hover_in(event):
-        flip_forward__button.configure(image=flip_forward_b_hover_img)
 
+    ####-------------------------BUTTON-Aesthetic-functions
+    global just_added_new_date
+    # ----HOVER
+    # __________________
+    def flip_forward_b_hover_in(event):
+        if not just_added_new_date:
+            flip_forward__button.configure(image=flip_forward_b_hover_img)
+        else:
+            flip_forward__button.configure(image=flip_forward_b_hover_img)
     def flip_forward_b_hover_out(event):
-        flip_forward__button.configure(image=flip_forward_b_norm_img)
+        if not just_added_new_date:
+            flip_forward__button.configure(image=flip_forward_b_norm_img)
+        else:
+            flip_forward__button.configure(image=flip_forward_b_hover_img)
 
     # bind events:
     flip_forward__button.bind("<Enter>", flip_forward_b_hover_in)
     flip_forward__button.bind("<Leave>", flip_forward_b_hover_out)
-
+    #------------------------------------------------------------------------
     # ----CLICK-STATE
+    # __________________
     def flip_forward_b_clicked(event):
-        flip_forward__button.configure(image=flip_forward_b_clicked_img)
-
+        if not just_added_new_date:
+            flip_forward__button.configure(image=flip_forward_b_clicked_img)
+        else:
+            flip_forward__button.configure(image=flip_forward_b_hover_img)
     def flip_forward_b_unclicked(event):
-        flip_forward__button.configure(image=flip_forward_b_norm_img)
+        if not just_added_new_date:
+            flip_forward__button.configure(image=flip_forward_b_norm_img)
+        else:
+            flip_forward__button.configure(image=flip_forward_b_hover_img)
+
 
     # bind events:
     flip_forward__button.bind("<ButtonPress-1>", flip_forward_b_clicked)

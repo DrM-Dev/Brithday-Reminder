@@ -4,7 +4,7 @@ import winsound
 #________________________________________________STARTUP:
 def startup_sound():
     # ------------------
-    sound = "Windows Notify Calendar.wav"
+    sound = "birthday_reminder_startup.wav"
     try:
         winsound.PlaySound(fr"audio\{sound}", winsound.SND_FILENAME | winsound.SND_ASYNC
     )
