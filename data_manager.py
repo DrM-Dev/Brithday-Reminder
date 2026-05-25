@@ -172,7 +172,7 @@ def delete_date(key_name):
                 with open("data/data.json", "w") as file: # --> Assembling everything back together
                     json.dump(data, file, indent=4)
             #----------------NOTIFICATION:
-            messagebox.showinfo(title="Target Acquired", message=f"Birthday entry [{key_name}] have been deleted!")
+            # messagebox.showinfo(title="Target Acquired", message=f"Birthday entry [{key_name}] have been deleted!")
         except KeyError:
             messagebox.showwarning(title="WRONG NAME", message="The date you wanted to delete had a typo, or doesn't exist! try again :(")
     #------------------------------------

@@ -32,6 +32,11 @@ def grab_data_slots():
         least_days_count = 400 #--->since a year is 356, so I just wanted to make it even xD "plus I love number 4" :)
         # ----
         for data_slot in recovered_data.items():
+            #Variables for debugs:
+            days_left_count = 0
+            target_date = 0
+            today = 0
+            #----
             if data_slot[1]["Day"] == "0" or data_slot[1]["Month"] == "0" or data_slot[0] == "TEST":  # <-----detect & skip any empty data-slot
                 print("EMPTY DATA-SLOT SKIPPED")
             else:
@@ -46,12 +51,23 @@ def grab_data_slots():
                 today = date.today()
                 # ------------------------------------------ calculating days left
                 days_left_count = (target_date - today).days
+                ###############
+                # If it already passed this year, shift to next year
+                if days_left_count < 0: #check if negative -------instead of--------->  #target_date < today:
+                    print("negative date detected, rolling to next year")
+                    target_date = date(year + 1, month, day)
+                ###############
+                # ------------------------------------------ calculating days left (AGAIN)
+                days_left_count = (target_date - today).days
                 # ------------ CHECKING IF THIS DATE IS CLOSER
                 if days_left_count < least_days_count:
+                    least_days_count = days_left_count #NEW!
                     nearest_birthday.clear()
                     nearest_birthday.append(date_name)
                     nearest_birthday.append(days_left_count)
-        #
+            #debug1
+            print(f"CHECKING NEAREST BIRTHDAY UPDATE:{target_date} - {today} {days_left_count}")
+        #debug2
         print("NEAREST DAY CALCULATING COMPLETED!")
         print(f"{nearest_birthday}")
         # ----
@@ -85,9 +101,12 @@ def calculate_nearest_birthday():
     grab_data_slots()
     global nearest_birthday
     #----------------
-    date_data = (f"{nearest_birthday[0]}",f"{nearest_birthday[1]}")
-    print(f"NEAST BIRTHDAY IS {nearest_birthday[0]} which is {nearest_birthday[1]}-DAYS LEFT")
-    return date_data #---->SEND A TUPLE (name of the birthday entry, days left)
-
+    try:
+        date_data = (f"{nearest_birthday[0]}",f"{nearest_birthday[1]}")
+        print(f"NEAST BIRTHDAY IS {nearest_birthday[0]} which is {nearest_birthday[1]}-DAYS LEFT")
+        return date_data #---->SEND A TUPLE (name of the birthday entry, days left)
+    except IndexError:
+        date_data = ("",0)
+        return date_data
 #___________________________________________________________TEST-Launch:
 # calculate_nearest_birthday()

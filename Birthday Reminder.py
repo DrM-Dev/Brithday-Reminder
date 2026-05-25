@@ -1,8 +1,5 @@
 #Birthday Reminder - ver       by      Dr.M-Dev
-
-
-
-ver = "0.1.1.31"
+ver = "0.1.1.35"
 #====================IMPORTS:
 from tkinter import *
 import customtkinter
@@ -222,6 +219,14 @@ def add_b_day():
     #------------------------------------
     if len(str(name_entry.get())) > 18:
         messagebox.showwarning(title="Long Name", message="A first name should not exceed 18 letters :)")
+    elif len(str(name_entry.get())) == 0:
+        messagebox.showwarning(title="NO Name", message="To save a birthday, you must give it a name!")
+    elif day_data == 0:
+        messagebox.showwarning(title="NO Day", message="To save a birthday, you must give it a day!")
+    elif month_data == 0:
+        messagebox.showwarning(title="NO Month", message="To save a birthday, you must give it a month!")
+    elif len(str(year_entry.get())) == 0:
+        messagebox.showwarning(title="NO Year", message="To save a birthday, you should give it a year!")
     else:
         data_manager.save_file(birthday_entry)
         #DEBUGS/CHECKS/WARNINGS were moved to data_manager.py
@@ -236,6 +241,11 @@ def add_b_day():
         save_noti_widget.place(x=widgets_x_place+430,y=widgets_y_place+340)
         #
         audio_system.save_file_sound()
+    #------------------------------------add a new date to notebook!
+    global just_added_new_date
+    just_added_new_date = True
+    #------------------------------------update the nearest birthday!!
+    display_nearest_birthday()
 
 
 #####-----------------------THE BUTTON
@@ -339,7 +349,7 @@ nearest_date_data = ""
 date_time_display = CTkLabel(root, text=current_date_data, fg_color="pink", corner_radius=15, text_color="black", font=("Consolas", 20, "bold"))
 date_time_display.place(x=widgets_x_place+20,y=widgets_y_place-15)
 #--------
-nearest_bday_display = CTkLabel(root, text=nearest_date_data, fg_color="red", corner_radius=15, text_color="black", font=("Consolas", 20, "bold"), anchor="w")
+nearest_bday_display = CTkLabel(root, text=nearest_date_data, fg_color="red", corner_radius=15, text_color="black", font=("Consolas", 20, "bold"), anchor="center")
 nearest_bday_display.place(x=widgets_x_place+15,y=widgets_y_place+25)
 
 #-FUNCTIONs:
@@ -349,10 +359,22 @@ def display_nearest_birthday():
     date_data = scanning_nearest_date.calculate_nearest_birthday()
     # ------------------------------
     if date_data != ("",0):
-        nearest_date_data = f"ALERT: only {date_data[1]}-DAYS LEFT until {date_data[0]}'s birthday!"
-        nearest_bday_display.configure(text=nearest_date_data)
+        if len(date_data[0]) >= 10:
+            nearest_date_data = f"Nearest birthday is for {date_data[0]}, {date_data[1]}-DAYS LEFT!"
+            nearest_bday_display.configure(text=nearest_date_data)
+            nearest_bday_display.place(x=widgets_x_place-len(date_data[0]),y=widgets_y_place+25)
+        elif len(date_data[0]) <= 4:
+            nearest_date_data = f"Nearest birthday is for {date_data[0]}, {date_data[1]}-DAYS LEFT!"
+            nearest_bday_display.configure(text=nearest_date_data)
+            nearest_bday_display.place(x=widgets_x_place + 25, y=widgets_y_place + 25)
+        else:
+            nearest_date_data = f"Nearest birthday is for {date_data[0]}, {date_data[1]}-DAYS LEFT!"
+            nearest_bday_display.configure(text=nearest_date_data)
+            nearest_bday_display.place(x=widgets_x_place, y=widgets_y_place + 25)
     else:
-        nearest_date_data = f"There are 0 dates saved in the system, go and add a new \"cake\" day ;)"
+        nearest_date_data = f"There are 0 dates saved in the system, add a date :)"
+        nearest_bday_display.configure(text=nearest_date_data)
+        nearest_bday_display.place(x=widgets_x_place - 15, y=widgets_y_place + 25)
 
 
 ############################################
@@ -434,6 +456,8 @@ text_output_page1 = ""
 text_output_page2 = ""
 text_output_page3 = ""
 text_output_page4 = ""
+#
+just_added_new_date = False
 
 def check_dates_list():
     #____________________________________________________________________________________________________
@@ -619,7 +643,13 @@ def check_dates_list():
         audio_system.flip_page_sound()
         #DEBUG:
         print("+FLIP-FORWARD")
-
+        #__________________
+        global just_added_new_date
+        if just_added_new_date:
+            update_data_slots_display()
+            just_added_new_date = False
+            #
+            # flip_forward__button.configure(image=flip_forward_b_hover_img)
 
     # _____________________________________________________BUTTONS\\
     # 0000#------------------------------ FLIP PAGE BUTTON!
@@ -703,9 +733,9 @@ def check_dates_list():
                 messagebox.showinfo(title="No Name Entered", message="Please write a birthday date name to remove!")
             else:
                 data_manager.delete_date(user_input)
-        else:
-            messagebox.showinfo(title="Deletion Canceled",
-                                message="Nothing was deleted, retuning to note book browser :)")
+        # else:
+        #     messagebox.showinfo(title="Deletion Canceled",
+        #                         message="Nothing was deleted, retuning to note book browser :)")
         #_________________________________________
         #________________________________old setup:
         # data_slot_name = delete_dialog_window.open_input_dialog()
@@ -777,6 +807,9 @@ def check_dates_list():
         audio_system.closing_dates_book()
         # --- #
         check_dates_window.destroy()  # Explicitly close the window
+        # --- #
+        #updating the nearest birthday!
+        display_nearest_birthday()
 
 
     check_dates_window.protocol("WM_DELETE_WINDOW", on_closing)
